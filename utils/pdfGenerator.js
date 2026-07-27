@@ -2,39 +2,38 @@ const QRCode = require("qrcode");
 const { permitTemplate } = require("../templates/permitTemplate");
 
 /**
- * Generates a permit PDF (Buffer) for the given permit document.
- * - On Vercel (production): uses @sparticuz/chromium + puppeteer-core
- * - Locally: uses system Chrome via full puppeteer package
+ * Generates a permit PDF (Buffer).
+ * - Vercel (production) : @sparticuz/chromium + puppeteer-core
+ * - Local (development) : full puppeteer with system Chrome
  */
 async function generatePermitPdf(permit) {
-  const baseUrl = process.env.BASE_URL || "http://localhost:3000";
+  const baseUrl  = process.env.BASE_URL || "http://localhost:3000";
   const verifyUrl = `${baseUrl}/verify/${permit._id}`;
 
-  // 1. Build QR code as a base64 PNG data URL
-  const qrDataUrl = await QRCode.toDataURL(verifyUrl, {
-    margin: 1,
-    width: 300,
-  });
+  // 1. QR code as base64 PNG
+  const qrDataUrl = await QRCode.toDataURL(verifyUrl, { margin: 1, width: 300 });
 
-  // 2. Build the HTML for this permit
+  // 2. Permit HTML
   const html = permitTemplate(permit, qrDataUrl);
 
-  // 3. Launch browser — environment-aware
+  // 3. Launch browser
   let browser;
-  const isVercel = process.env.VERCEL === "1";
+  const isVercel = !!process.env.VERCEL;
 
   if (isVercel) {
-    // Vercel serverless: use lightweight chromium
-    const chromium = require("@sparticuz/chromium");
-    const puppeteer = require("puppeteer-core");
+    const chromium   = require("@sparticuz/chromium");
+    const puppeteer  = require("puppeteer-core");
+
+    // chromium.args already includes --no-sandbox etc.
     browser = await puppeteer.launch({
-      args: chromium.args,
+      args:            [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
       defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
+      executablePath:  await chromium.executablePath(),
+      headless:        chromium.headless,
+      ignoreHTTPSErrors: true,
     });
   } else {
-    // Local development: use system Chrome
+    // Local — use system Chrome (Windows path or override via env)
     const puppeteer = require("puppeteer");
     browser = await puppeteer.launch({
       headless: "new",
@@ -48,10 +47,7 @@ async function generatePermitPdf(permit) {
   try {
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
-    const pdfBuffer = await page.pdf({
-      format: "A4",
-      printBackground: true,
-    });
+    const pdfBuffer = await page.pdf({ format: "A4", printBackground: true });
     return pdfBuffer;
   } finally {
     await browser.close();
