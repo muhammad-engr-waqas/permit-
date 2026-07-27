@@ -1,57 +1,32 @@
-const QRCode = require("qrcode");
+const QRCode   = require("qrcode");
+const htmlPdf  = require("html-pdf-node");
 const { permitTemplate } = require("../templates/permitTemplate");
 
 /**
- * Generates a permit PDF (Buffer).
- * - Vercel (production) : @sparticuz/chromium + puppeteer-core
- * - Local (development) : full puppeteer with system Chrome
+ * Generates a permit PDF Buffer using html-pdf-node.
+ * Works on both local and Vercel (no Chrome binary needed).
  */
 async function generatePermitPdf(permit) {
-  const baseUrl  = process.env.BASE_URL || "http://localhost:3000";
+  const baseUrl   = process.env.BASE_URL || "http://localhost:3000";
   const verifyUrl = `${baseUrl}/verify/${permit._id}`;
 
-  // 1. QR code as base64 PNG
+  // 1. QR code → base64 PNG
   const qrDataUrl = await QRCode.toDataURL(verifyUrl, { margin: 1, width: 300 });
 
-  // 2. Permit HTML
+  // 2. Build HTML
   const html = permitTemplate(permit, qrDataUrl);
 
-  // 3. Launch browser
-  let browser;
-  const isVercel = !!process.env.VERCEL;
+  // 3. Render HTML → PDF
+  const file    = { content: html };
+  const options = {
+    format: "A4",
+    printBackground: true,
+    margin: { top: "28px", right: "34px", bottom: "28px", left: "34px" },
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  };
 
-  if (isVercel) {
-    const chromium   = require("@sparticuz/chromium");
-    const puppeteer  = require("puppeteer-core");
-
-    // chromium.args already includes --no-sandbox etc.
-    browser = await puppeteer.launch({
-      args:            [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
-      defaultViewport: chromium.defaultViewport,
-      executablePath:  await chromium.executablePath(),
-      headless:        chromium.headless,
-      ignoreHTTPSErrors: true,
-    });
-  } else {
-    // Local — use system Chrome (Windows path or override via env)
-    const puppeteer = require("puppeteer");
-    browser = await puppeteer.launch({
-      headless: "new",
-      executablePath:
-        process.env.CHROME_PATH ||
-        "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
-  }
-
-  try {
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: "networkidle0" });
-    const pdfBuffer = await page.pdf({ format: "A4", printBackground: true });
-    return pdfBuffer;
-  } finally {
-    await browser.close();
-  }
+  const pdfBuffer = await htmlPdf.generatePdf(file, options);
+  return pdfBuffer;
 }
 
 module.exports = { generatePermitPdf };

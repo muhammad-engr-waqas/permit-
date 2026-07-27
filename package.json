@@ -12,13 +12,11 @@
     "mongoose": "^8.5.1",
     "dotenv": "^16.4.5",
     "qrcode": "^1.5.3",
-    "puppeteer-core": "^22.13.1",
-    "@sparticuz/chromium": "^131.0.1",
+    "html-pdf-node": "^1.0.8",
     "uuid": "^9.0.1",
     "cors": "^2.8.5"
   },
   "devDependencies": {
-    "nodemon": "^3.1.4",
-    "puppeteer": "^22.13.1"
+    "nodemon": "^3.1.4"
   }
 }
