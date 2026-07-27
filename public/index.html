@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>إنشاء تصريح جديد | New Permit</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <h1>إصدار تصريح موارد بشرية</h1>
+    <p class="sub">Fill in the details below to generate the permit PDF with QR code.</p>
+
+    <form id="permitForm">
+      <fieldset>
+        <legend>بيانات العامل / Laborer Information</legend>
+
+        <label>Laborer Name (English)
+          <input type="text" name="laborerNameEn" required placeholder="MUHAMMAD WAQAS ABDUL MALIK" />
+        </label>
+        <label>اسم العامل (Arabic - optional)
+          <input type="text" name="laborerNameAr" />
+        </label>
+        <label>Occupation (English)
+          <input type="text" name="occupationEn" required placeholder="Heavy Truck Driver" />
+        </label>
+        <label>Nationality (English)
+          <input type="text" name="nationalityEn" required placeholder="Pakistani" />
+        </label>
+        <label>ID / Iqama Number
+          <input type="text" name="idNumber" required placeholder="2604732350" />
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>بيانات مقدم الخدمة / Provider Establishment</legend>
+        <label>Provider Name
+          <input type="text" name="providerNameEn" required placeholder="Naas HR Solutions Company" />
+        </label>
+        <label>Establishment Number
+          <input type="text" name="providerEstablishmentNumber" required placeholder="1-373379" />
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>بيانات المستفيد من الخدمة / Beneficiary Establishment</legend>
+        <label>Beneficiary Name
+          <input type="text" name="beneficiaryNameEn" required placeholder="AFS Limited Company" />
+        </label>
+        <label>Establishment Number
+          <input type="text" name="beneficiaryEstablishmentNumber" required placeholder="9-1960233" />
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>بيانات التصريح / Permit Information</legend>
+        <label>Permit Start Date
+          <input type="date" name="permitStartDate" required />
+        </label>
+        <label>Permit End Date
+          <input type="date" name="permitEndDate" required />
+        </label>
+      </fieldset>
+
+      <button type="submit" id="submitBtn">إنشاء وتنزيل PDF / Generate &amp; Download PDF</button>
+      <p id="statusMsg"></p>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
