@@ -70,26 +70,15 @@
     .header-logos {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
     }
-    .logo-ajeer-box {
-      background: #154360;
-      color: #fff;
-      font-weight: 900;
-      font-size: 22px;
-      padding: 5px 14px;
-      border-radius: 4px;
-      letter-spacing: 1px;
+    .logo-ajeer-img {
+      height: 56px;
+      width: auto;
     }
-    .logo-ministry {
-      text-align: right;
-      font-size: 9px;
-      color: #444;
-      line-height: 1.6;
-    }
-    .logo-ministry-icon {
-      width: 38px;
-      height: 38px;
+    .logo-ministry-img {
+      height: 56px;
+      width: auto;
     }
 
     /* ── INTRO TEXT ── */
@@ -226,10 +215,23 @@
             '<div class="header-right">' +
               '<div class="header-title">إشعار أجير حلول الموارد<br/>البشرية</div>' +
               '<div class="header-logos">' +
-                '<div class="logo-ministry">' +
-                  'وزارة الموارد البشرية<br/>والتنمية الاجتماعية' +
-                '</div>' +
-                '<div class="logo-ajeer-box">أجير</div>' +
+                /* Ministry logo SVG */
+                '<svg class="logo-ministry-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 90">' +
+                  '<text x="110" y="28" font-family="Tahoma,Arial" font-size="13" font-weight="bold" fill="#2c7a3a" text-anchor="middle">وزارة الموارد البشرية</text>' +
+                  '<text x="110" y="46" font-family="Tahoma,Arial" font-size="13" font-weight="bold" fill="#2c7a3a" text-anchor="middle">والتنمية الاجتماعية</text>' +
+                  '<text x="110" y="62" font-family="Tahoma,Arial" font-size="10" fill="#555" text-anchor="middle">المملكة العربية السعودية</text>' +
+                  /* palm/flower icon */
+                  '<g transform="translate(168,10) scale(0.45)">' +
+                    '<polygon points="50,0 65,35 100,35 73,57 84,92 50,70 16,92 27,57 0,35 35,35" fill="#f0a500" opacity="0.9"/>' +
+                    '<polygon points="50,10 60,38 88,38 66,54 74,82 50,66 26,82 34,54 12,38 40,38" fill="#2c7a3a" opacity="0.85"/>' +
+                  '</g>' +
+                '</svg>' +
+                /* Ajeer logo SVG */
+                '<svg class="logo-ajeer-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 90">' +
+                  '<text x="55" y="48" font-family="Tahoma,Arial" font-size="36" font-weight="900" fill="#1a2e5a" text-anchor="middle">أجير</text>' +
+                  '<rect x="18" y="52" width="38" height="7" rx="3" fill="#3aaa5c"/>' +
+                  '<text x="55" y="76" font-family="Arial" font-size="11" font-weight="700" fill="#3aaa5c" text-anchor="middle">AJEER</text>' +
+                '</svg>' +
               '</div>' +
             '</div>' +
           '</div>' +
