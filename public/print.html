@@ -4,168 +4,196 @@
   <meta charset="UTF-8" />
   <title>Permit</title>
   <style>
-    /* ── Screen styles ── */
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-      background: #f3f4f6;
+      background: #f0f0f0;
       padding: 20px;
-      color: #1f2937;
-      font-size: 12px;
+      color: #1a1a1a;
+      font-size: 11px;
     }
-    .page {
-      background: #fff;
-      max-width: 794px;
-      margin: 0 auto;
-      padding: 34px 40px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.1);
-    }
+
     .no-print {
       text-align: center;
       margin-bottom: 16px;
     }
     .btn-print {
-      background: #0f766e;
+      background: #1a5276;
       color: #fff;
       border: none;
-      padding: 10px 28px;
-      border-radius: 6px;
+      padding: 10px 32px;
+      border-radius: 5px;
       font-size: 14px;
       cursor: pointer;
       font-weight: 600;
     }
-    .btn-print:hover { background: #0c5f58; }
+    .btn-print:hover { background: #154360; }
 
-    /* ── Permit layout ── */
-    .header {
+    /* A4 page */
+    .page {
+      background: #fff;
+      width: 794px;
+      min-height: 1123px;
+      margin: 0 auto;
+      padding: 32px 36px 28px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+    }
+
+    /* ── HEADER BOX ── */
+    .header-box {
+      border: 1px solid #999;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      border: 1px solid #ccc;
-      padding: 14px;
-      margin-bottom: 16px;
+      align-items: center;
+      padding: 12px 16px;
+      margin-bottom: 18px;
     }
-    .header .qr img { width: 120px; height: 120px; }
-    .header .logos {
+    .qr-wrap img {
+      width: 115px;
+      height: 115px;
+      display: block;
+    }
+    .header-right {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 6px;
+      gap: 8px;
     }
-    .header .logos .title-ar {
-      font-size: 15px;
+    .header-title {
+      font-size: 16px;
       font-weight: 700;
-      color: #1f2937;
-      text-align: center;
+      color: #1a1a1a;
+      text-align: right;
+      line-height: 1.5;
     }
-    .header .logos .logo-row {
+    .header-logos {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
-    .logo-ajeer {
-      background: #1a5276;
+    .logo-ajeer-box {
+      background: #154360;
       color: #fff;
-      font-weight: 700;
-      font-size: 20px;
-      padding: 6px 14px;
+      font-weight: 900;
+      font-size: 22px;
+      padding: 5px 14px;
       border-radius: 4px;
+      letter-spacing: 1px;
     }
     .logo-ministry {
-      font-size: 10px;
-      color: #555;
       text-align: right;
-      line-height: 1.4;
+      font-size: 9px;
+      color: #444;
+      line-height: 1.6;
+    }
+    .logo-ministry-icon {
+      width: 38px;
+      height: 38px;
     }
 
+    /* ── INTRO TEXT ── */
     .intro {
       font-size: 11px;
-      line-height: 1.9;
+      line-height: 2;
       text-align: justify;
       margin-bottom: 14px;
-      color: #374151;
+      color: #1a1a1a;
+      direction: rtl;
     }
 
-    /* ── Info tables ── */
-    table.info {
+    /* ── TABLES ── */
+    table.permit-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 10px;
-      font-size: 11px;
+      margin-bottom: 8px;
+      font-size: 10.5px;
+      direction: rtl;
     }
-    table.info .caption-row td {
+    table.permit-table .table-header td {
       background: #fff;
-      border: 1px solid #999;
+      border: 1px solid #888;
       text-align: center;
       font-weight: 700;
-      font-size: 12px;
+      font-size: 11.5px;
       padding: 5px 8px;
+      color: #1a1a1a;
     }
-    table.info td {
-      border: 1px solid #bbb;
-      padding: 6px 8px;
+    table.permit-table td {
+      border: 1px solid #aaa;
+      padding: 6px 10px;
       vertical-align: top;
     }
-    table.info .lbl {
-      font-size: 9.5px;
-      color: #6b7280;
-      margin-bottom: 2px;
+    .cell-label {
+      font-size: 9px;
+      color: #666;
+      margin-bottom: 3px;
+      line-height: 1.4;
     }
-    table.info .val {
+    .cell-value {
       font-weight: 700;
-      font-size: 11.5px;
+      font-size: 11px;
       color: #111;
     }
 
-    /* ── Declarations ── */
+    /* ── DECLARATIONS ── */
     .declarations {
-      margin-top: 14px;
-      font-size: 11px;
+      margin-top: 16px;
+      direction: rtl;
     }
-    .declarations .decl-title {
+    .decl-main-title {
+      font-size: 13px;
       font-weight: 700;
-      font-size: 12px;
-      margin-bottom: 8px;
+      text-align: center;
+      margin-bottom: 10px;
       text-decoration: underline;
     }
-    .declarations .decl-subtitle {
-      font-weight: 700;
+    .decl-sub-title {
       font-size: 11px;
-      margin-bottom: 6px;
+      font-weight: 700;
+      margin-bottom: 8px;
     }
-    .declarations ul {
-      padding-inline-start: 18px;
-      line-height: 2;
-      color: #1f2937;
+    .decl-list {
+      list-style: disc;
+      padding-right: 20px;
+      line-height: 2.1;
+      font-size: 10.5px;
+      color: #1a1a1a;
     }
 
-    /* ── Footer ── */
-    .footer {
-      margin-top: 20px;
+    /* ── FOOTER ── */
+    .page-footer {
+      margin-top: 24px;
       text-align: center;
-      font-size: 10px;
-      color: #6b7280;
-      border-top: 1px solid #e5e7eb;
-      padding-top: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #1a1a1a;
+      border-top: 1px solid #ccc;
+      padding-top: 10px;
     }
 
-    /* ── Print styles ── */
+    /* ── PRINT ── */
     @media print {
       body { background: #fff; padding: 0; }
-      .page { box-shadow: none; padding: 20px 28px; max-width: 100%; }
       .no-print { display: none !important; }
-      @page { size: A4; margin: 15mm 12mm; }
+      .page {
+        box-shadow: none;
+        width: 100%;
+        padding: 18px 22px;
+        min-height: unset;
+      }
+      @page { size: A4 portrait; margin: 10mm; }
     }
   </style>
 </head>
 <body>
 
   <div class="no-print">
-    <button class="btn-print" onclick="window.print()">🖨️ طباعة / Save as PDF</button>
+    <button class="btn-print" onclick="window.print()">🖨️ Save as PDF / طباعة</button>
   </div>
 
   <div class="page" id="permit-page">
-    <p style="text-align:center; color:#888; padding:40px;">جاري التحميل... Loading...</p>
+    <p style="text-align:center;color:#888;padding:60px 0;">جاري التحميل... Loading...</p>
   </div>
 
   <script>
@@ -173,150 +201,113 @@
     const page = document.getElementById("permit-page");
 
     function fmt(d) {
-      const date = new Date(d);
-      return date.getFullYear() + "-" +
-        String(date.getMonth()+1).padStart(2,"0") + "-" +
-        String(date.getDate()).padStart(2,"0");
+      if (!d) return "";
+      const dt = new Date(d);
+      return dt.getFullYear() + "-" +
+        String(dt.getMonth() + 1).padStart(2, "0") + "-" +
+        String(dt.getDate()).padStart(2, "0");
     }
 
-    fetch(`/api/permits/${id}`)
-      .then(r => { if(!r.ok) throw new Error(); return r.json(); })
-      .then(p => {
-        page.innerHTML = `
-
-          <!-- HEADER -->
-          <div class="header">
-            <div class="qr">
-              <img id="qr-img" src="" alt="QR" />
-            </div>
-            <div class="logos">
-              <div class="title-ar">إشعار أجير حلول الموارد<br/>البشرية</div>
-              <div class="logo-row">
-                <div class="logo-ministry">وزارة الموارد البشرية<br/>والتنمية الاجتماعية</div>
-                <div class="logo-ajeer">أجير</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- INTRO -->
-          <div class="intro">
-            نشعركم أنه تم التعاقد من قبلنا كجهة مقدمة للخدمة مع الجهة المستفيدة من الخدمة حسب المعلومات المبينة أدناه،
-            ولذلك تم تسجيل معلومات العقد لتكون بحوزة العامل لإثبات عدم مخالفته لنظام العمل ولتقديمها إلى من يهمه الأمر
-            من الجهات المختصة عند طلبها للتحقق من صحة تواجده في مكان تقديم الخدمة.
-          </div>
-
-          <!-- LABORER INFO -->
-          <table class="info">
-            <tr class="caption-row">
-              <td colspan="3">بيانات العامل &nbsp; Laborer Information</td>
-            </tr>
-            <tr>
-              <td>
-                <div class="lbl">اسم العامل<br/>Laborer Name</div>
-                <div class="val">${p.laborerNameEn}</div>
-              </td>
-              <td>
-                <div class="lbl">المهنة<br/>Occupation</div>
-                <div class="val">${p.occupationEn}</div>
-              </td>
-              <td>
-                <div class="lbl">الجنسية<br/>Nationality</div>
-                <div class="val">${p.nationalityEn}</div>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="3">
-                <div class="lbl">رقم الهوية / الإقامة &nbsp; ID Number</div>
-                <div class="val">${p.idNumber}</div>
-              </td>
-            </tr>
-          </table>
-
-          <!-- PROVIDER INFO -->
-          <table class="info">
-            <tr class="caption-row">
-              <td colspan="2">بيانات مقدم الخدمة &nbsp; Provider Information</td>
-            </tr>
-            <tr>
-              <td style="width:66%">
-                <div class="lbl">المنشأة المقدمة للخدمة<br/>Provider Establishment</div>
-                <div class="val">${p.providerNameEn}${p.providerNameAr ? '<br/><span style="font-size:11px">'+p.providerNameAr+'</span>' : ''}</div>
-              </td>
-              <td>
-                <div class="lbl">رقم المنشأة في وزارة الموارد البشرية والتنمية الاجتماعية<br/>Establishment Number</div>
-                <div class="val">${p.providerEstablishmentNumber}</div>
-              </td>
-            </tr>
-          </table>
-
-          <!-- BENEFICIARY INFO -->
-          <table class="info">
-            <tr class="caption-row">
-              <td colspan="2">بيانات المستفيد من الخدمة &nbsp; Beneficiary Information</td>
-            </tr>
-            <tr>
-              <td style="width:66%">
-                <div class="lbl">المنشأة المستفيدة من الخدمة<br/>Beneficiary Establishment</div>
-                <div class="val">${p.beneficiaryNameEn}${p.beneficiaryNameAr ? '<br/><span style="font-size:11px">'+p.beneficiaryNameAr+'</span>' : ''}</div>
-              </td>
-              <td>
-                <div class="lbl">رقم المنشأة في وزارة الموارد البشرية والتنمية الاجتماعية<br/>Establishment Number</div>
-                <div class="val">${p.beneficiaryEstablishmentNumber}</div>
-              </td>
-            </tr>
-          </table>
-
-          <!-- PERMIT DATES -->
-          <table class="info">
-            <tr class="caption-row">
-              <td colspan="2">بيانات التصريح &nbsp; Permit Information</td>
-            </tr>
-            <tr>
-              <td>
-                <div class="lbl">تاريخ بداية التصريح<br/>Permit Start Date</div>
-                <div class="val">${fmt(p.permitStartDate)}</div>
-              </td>
-              <td>
-                <div class="lbl">تاريخ نهاية التصريح<br/>Permit End Date</div>
-                <div class="val">${fmt(p.permitEndDate)}</div>
-              </td>
-            </tr>
-          </table>
-
-          <!-- DECLARATIONS -->
-          <div class="declarations">
-            <div class="decl-title">إقرارات</div>
-            <div class="decl-subtitle">أقر أنا المنشأة المقدمة للخدمة والموضحة بأعلى وأتعهد بـ:</div>
-            <ul>
-              <li>إن العامل حامل هذا التصريح يقر ويتعهد بأن البيانات المدونة فيه صحيحة على مسؤوليته الشخصية، وأنه يعمل لدى المنشأة ولحسابها بموجب رخصة إقامة سارية المفعول.</li>
-              <li>الالتزام والتقيد بأنظمة العمل والعمال والأفراد والأحوال الشخصية وأي أنظمة ولوائح وقرارات أخرى ذات علاقة.</li>
-              <li>إن الموقع الإلكتروني الخاص بأجير حلول الموارد البشرية متاح من قِبله أو القائمين عليه للتحقق مما هو وارد بهذا التصريح.</li>
-              <li>إن إلزام أصحاب الأعمال أو غيرهم على التعامل مع المنشأة فقط وبدون أي إلزام قانون أو غيره على التعامل مع موقع أجير.</li>
-              <li>أي تعديل أو كشط في هذا التصريح يجعله لاغياً.</li>
-            </ul>
-          </div>
-
-          <!-- FOOTER -->
-          <div class="footer">
-            "خدمة مقدمة من وزارة الموارد البشرية والتنمية الاجتماعية"
-          </div>
-        `;
-
-        // Generate QR code using the actual permit id
-        const verifyUrl = window.location.origin + "/verify/" + id;
-        document.getElementById("qr-img").src =
-          "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=" +
-          encodeURIComponent(verifyUrl);
-
-        // Auto-print after QR loads
-        document.getElementById("qr-img").onload = () => {
-          setTimeout(() => window.print(), 800);
-        };
-        // Fallback if onload doesn't fire
-        setTimeout(() => window.print(), 2000);
+    fetch("/api/permits/" + id)
+      .then(function(r) {
+        if (!r.ok) throw new Error("Not found");
+        return r.json();
       })
-      .catch(() => {
-        page.innerHTML = "<p style='text-align:center;color:red;padding:40px'>Permit not found</p>";
+      .then(function(p) {
+        const verifyUrl = window.location.origin + "/verify/" + id;
+        const qrSrc = "https://api.qrserver.com/v1/create-qr-code/?size=115x115&margin=4&data=" +
+                      encodeURIComponent(verifyUrl);
+
+        page.innerHTML =
+          '<div class="header-box">' +
+            '<div class="qr-wrap">' +
+              '<img id="qr-img" src="' + qrSrc + '" alt="QR Code" />' +
+            '</div>' +
+            '<div class="header-right">' +
+              '<div class="header-title">إشعار أجير حلول الموارد<br/>البشرية</div>' +
+              '<div class="header-logos">' +
+                '<div class="logo-ministry">' +
+                  'وزارة الموارد البشرية<br/>والتنمية الاجتماعية' +
+                '</div>' +
+                '<div class="logo-ajeer-box">أجير</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="intro">' +
+            'نشعركم أنه تم التعاقد من قبلنا كجهة مقدمة للخدمة مع الجهة المستفيدة من الخدمة حسب المعلومات المبينة أدناه، ' +
+            'ولذلك تم تسجيل معلومات العقد لتكون بحوزة العامل لإثبات عدم مخالفته لنظام العمل ولتقديمها إلى من يهمه الأمر ' +
+            'من الجهات المختصة عند طلبها للتحقق من صحة تواجده في مكان تقديم الخدمة.' +
+          '</div>' +
+
+          /* ── Laborer ── */
+          '<table class="permit-table">' +
+            '<tr class="table-header"><td colspan="3">بيانات العامل &nbsp; Laborer Information</td></tr>' +
+            '<tr>' +
+              '<td><div class="cell-label">اسم العامل<br/>Laborer Name</div><div class="cell-value">' + (p.laborerNameEn || '') + '</div></td>' +
+              '<td><div class="cell-label">المهنة<br/>Occupation</div><div class="cell-value">' + (p.occupationEn || '') + '</div></td>' +
+              '<td><div class="cell-label">سائق شاحنة ثقيلة<br/>Nationality</div><div class="cell-value">' + (p.nationalityEn || '') + '</div></td>' +
+            '</tr>' +
+            '<tr>' +
+              '<td colspan="3"><div class="cell-label">رقم الهوية / الإقامة &nbsp; ID Number</div><div class="cell-value">' + (p.idNumber || '') + '</div></td>' +
+            '</tr>' +
+          '</table>' +
+
+          /* ── Provider ── */
+          '<table class="permit-table">' +
+            '<tr class="table-header"><td colspan="2">بيانات مقدم الخدمة &nbsp; Provider Information</td></tr>' +
+            '<tr>' +
+              '<td style="width:65%"><div class="cell-label">المنشأة المقدمة للخدمة<br/>Provider Establishment</div>' +
+                '<div class="cell-value">' + (p.providerNameEn || '') + (p.providerNameAr ? '<br/>' + p.providerNameAr : '') + '</div></td>' +
+              '<td><div class="cell-label">رقم المنشأة في وزارة الموارد البشرية والتنمية الاجتماعية<br/>Establishment Number</div>' +
+                '<div class="cell-value">' + (p.providerEstablishmentNumber || '') + '</div></td>' +
+            '</tr>' +
+          '</table>' +
+
+          /* ── Beneficiary ── */
+          '<table class="permit-table">' +
+            '<tr class="table-header"><td colspan="2">بيانات المستفيد من الخدمة &nbsp; Beneficiary Information</td></tr>' +
+            '<tr>' +
+              '<td style="width:65%"><div class="cell-label">المنشأة المستفيدة من الخدمة<br/>Beneficiary Establishment</div>' +
+                '<div class="cell-value">' + (p.beneficiaryNameEn || '') + (p.beneficiaryNameAr ? '<br/>' + p.beneficiaryNameAr : '') + '</div></td>' +
+              '<td><div class="cell-label">رقم المنشأة في وزارة الموارد البشرية والتنمية الاجتماعية<br/>Establishment Number</div>' +
+                '<div class="cell-value">' + (p.beneficiaryEstablishmentNumber || '') + '</div></td>' +
+            '</tr>' +
+          '</table>' +
+
+          /* ── Permit dates ── */
+          '<table class="permit-table">' +
+            '<tr class="table-header"><td colspan="2">بيانات التصريح &nbsp; Permit Information</td></tr>' +
+            '<tr>' +
+              '<td><div class="cell-label">تاريخ بداية التصريح<br/>Permit Start Date</div><div class="cell-value">' + fmt(p.permitStartDate) + '</div></td>' +
+              '<td><div class="cell-label">تاريخ نهاية التصريح<br/>Permit End Date</div><div class="cell-value">' + fmt(p.permitEndDate) + '</div></td>' +
+            '</tr>' +
+          '</table>' +
+
+          /* ── Declarations ── */
+          '<div class="declarations">' +
+            '<div class="decl-main-title">إقرارات</div>' +
+            '<div class="decl-sub-title">أقر أنا المنشأة المقدمة للخدمة والموضحة بأعلى وأتعهد بـ:</div>' +
+            '<ul class="decl-list">' +
+              '<li>إن العامل حامل هذا التصريح يقر ويتعهد بأن البيانات المدونة فيه صحيحة على مسؤوليته الشخصية، وأنه يعمل لدى المنشأة ولحسابها بموجب رخصة إقامة سارية المفعول.</li>' +
+              '<li>الالتزام والتقيد بأنظمة العمل والعمال والأفراد والأحوال الشخصية وأي أنظمة ولوائح وقرارات أخرى ذات علاقة.</li>' +
+              '<li>إن الموقع الإلكتروني الخاص بأجير حلول الموارد البشرية متاح من قِبله أو القائمين عليه للتحقق مما هو وارد بهذا التصريح.</li>' +
+              '<li>إن إلزام أصحاب الأعمال أو غيرهم على التعامل مع المنشأة فقط وبدون أي إلزام قانون أو غيره على التعامل مع موقع أجير.</li>' +
+              '<li>أي تعديل أو كشط في هذا التصريح يجعله لاغياً.</li>' +
+            '</ul>' +
+          '</div>' +
+
+          '<div class="page-footer">"خدمة مقدمة من وزارة الموارد البشرية والتنمية الاجتماعية"</div>';
+
+        /* Auto print after QR loads */
+        var qrImg = document.getElementById("qr-img");
+        qrImg.onload  = function() { setTimeout(function(){ window.print(); }, 600); };
+        qrImg.onerror = function() { setTimeout(function(){ window.print(); }, 800); };
+        /* Fallback */
+        setTimeout(function(){ window.print(); }, 2500);
+      })
+      .catch(function() {
+        page.innerHTML = '<p style="text-align:center;color:red;padding:60px">Permit not found</p>';
       });
   </script>
 </body>
