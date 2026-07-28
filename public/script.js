@@ -1,47 +1,42 @@
-const form = document.getElementById("permitForm");
+const form      = document.getElementById("permitForm");
 const statusMsg = document.getElementById("statusMsg");
 const submitBtn = document.getElementById("submitBtn");
+const btnText   = document.getElementById("btnText");
+const spinner   = document.getElementById("spinner");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   statusMsg.textContent = "";
-  statusMsg.className = "";
-  submitBtn.disabled = true;
-  submitBtn.textContent = "جاري الإنشاء... / Generating...";
+  statusMsg.className   = "status-msg";
+  submitBtn.disabled    = true;
+  btnText.textContent   = "جاري الإنشاء... / Generating...";
+  spinner.classList.add("show");
 
   const data = Object.fromEntries(new FormData(form).entries());
 
   try {
     const res = await fetch("/api/permits", {
-      method: "POST",
+      method:  "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body:    JSON.stringify(data),
     });
 
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || "Failed to generate PDF");
-    }
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || "Failed to create permit");
 
-    // Download the returned PDF
-    const blob = await res.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "permit.pdf";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    window.URL.revokeObjectURL(url);
+    // Open the print page in a new tab — browser will print/save as PDF
+    window.open(`/print/${json.id}`, "_blank");
 
-    statusMsg.textContent = "تم إنشاء التصريح بنجاح! / Permit generated successfully!";
-    statusMsg.className = "success";
+    statusMsg.textContent = "✔ تم إنشاء التصريح! / Permit created — printing...";
+    statusMsg.classList.add("success");
     form.reset();
+
   } catch (err) {
-    statusMsg.textContent = "خطأ: " + err.message;
-    statusMsg.className = "error";
+    statusMsg.textContent = "✘ خطأ: " + err.message;
+    statusMsg.classList.add("error");
   } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = "إنشاء وتنزيل PDF / Generate & Download PDF";
+    submitBtn.disabled  = false;
+    btnText.textContent = "إنشاء وتنزيل PDF / Generate & Download PDF";
+    spinner.classList.remove("show");
   }
 });

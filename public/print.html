@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Permit</title>
+  <style>
+    /* ── Screen styles ── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background: #f3f4f6;
+      padding: 20px;
+      color: #1f2937;
+      font-size: 12px;
+    }
+    .page {
+      background: #fff;
+      max-width: 794px;
+      margin: 0 auto;
+      padding: 34px 40px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+    }
+    .no-print {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .btn-print {
+      background: #0f766e;
+      color: #fff;
+      border: none;
+      padding: 10px 28px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-print:hover { background: #0c5f58; }
+
+    /* ── Permit layout ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border: 1px solid #ccc;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .header .qr img { width: 120px; height: 120px; }
+    .header .logos {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+    .header .logos .title-ar {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1f2937;
+      text-align: center;
+    }
+    .header .logos .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-ajeer {
+      background: #1a5276;
+      color: #fff;
+      font-weight: 700;
+      font-size: 20px;
+      padding: 6px 14px;
+      border-radius: 4px;
+    }
+    .logo-ministry {
+      font-size: 10px;
+      color: #555;
+      text-align: right;
+      line-height: 1.4;
+    }
+
+    .intro {
+      font-size: 11px;
+      line-height: 1.9;
+      text-align: justify;
+      margin-bottom: 14px;
+      color: #374151;
+    }
+
+    /* ── Info tables ── */
+    table.info {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+      font-size: 11px;
+    }
+    table.info .caption-row td {
+      background: #fff;
+      border: 1px solid #999;
+      text-align: center;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 5px 8px;
+    }
+    table.info td {
+      border: 1px solid #bbb;
+      padding: 6px 8px;
+      vertical-align: top;
+    }
+    table.info .lbl {
+      font-size: 9.5px;
+      color: #6b7280;
+      margin-bottom: 2px;
+    }
+    table.info .val {
+      font-weight: 700;
+      font-size: 11.5px;
+      color: #111;
+    }
+
+    /* ── Declarations ── */
+    .declarations {
+      margin-top: 14px;
+      font-size: 11px;
+    }
+    .declarations .decl-title {
+      font-weight: 700;
+      font-size: 12px;
+      margin-bottom: 8px;
+      text-decoration: underline;
+    }
+    .declarations .decl-subtitle {
+      font-weight: 700;
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+    .declarations ul {
+      padding-inline-start: 18px;
+      line-height: 2;
+      color: #1f2937;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 10px;
+      color: #6b7280;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 8px;
+    }
+
+    /* ── Print styles ── */
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page { box-shadow: none; padding: 20px 28px; max-width: 100%; }
+      .no-print { display: none !important; }
+      @page { size: A4; margin: 15mm 12mm; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="no-print">
+    <button class="btn-print" onclick="window.print()">🖨️ طباعة / Save as PDF</button>
+  </div>
+
+  <div class="page" id="permit-page">
+    <p style="text-align:center; color:#888; padding:40px;">جاري التحميل... Loading...</p>
+  </div>
+
+  <script>
+    const id   = window.location.pathname.split("/").pop();
+    const page = document.getElementById("permit-page");
+
+    function fmt(d) {
+      const date = new Date(d);
+      return date.getFullYear() + "-" +
+        String(date.getMonth()+1).padStart(2,"0") + "-" +
+        String(date.getDate()).padStart(2,"0");
+    }
+
+    fetch(`/api/permits/${id}`)
+      .then(r => { if(!r.ok) throw new Error(); return r.json(); })
+      .then(p => {
+        page.innerHTML = `
+
+          <!-- HEADER -->
+          <div class="header">
+            <div class="qr">
+              <img id="qr-img" src="" alt="QR" />
+            </div>
+            <div class="logos">
+              <div class="title-ar">إشعار أجير حلول الموارد<br/>البشرية</div>
+              <div class="logo-row">
+                <div class="logo-ministry">وزارة الموارد البشرية<br/>والتنمية الاجتماعية</div>
+                <div class="logo-ajeer">أجير</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- INTRO -->
+          <div class="intro">
+            نشعركم أنه تم التعاقد من قبلنا كجهة مقدمة للخدمة مع الجهة المستفيدة من الخدمة حسب المعلومات المبينة أدناه،
+            ولذلك تم تسجيل معلومات العقد لتكون بحوزة العامل لإثبات عدم مخالفته لنظام العمل ولتقديمها إلى من يهمه الأمر
+            من الجهات المختصة عند طلبها للتحقق من صحة تواجده في مكان تقديم الخدمة.
+          </div>
+
+          <!-- LABORER INFO -->
+          <table class="info">
+            <tr class="caption-row">
+              <td colspan="3">بيانات العامل &nbsp; Laborer Information</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="lbl">اسم العامل<br/>Laborer Name</div>
+                <div class="val">${p.laborerNameEn}</div>
+              </td>
+              <td>
+                <div class="lbl">المهنة<br/>Occupation</div>
+                <div class="val">${p.occupationEn}</div>
+              </td>
+              <td>
+                <div class="lbl">الجنسية<br/>Nationality</div>
+                <div class="val">${p.nationalityEn}</div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <div class="lbl">رقم الهوية / الإقامة &nbsp; ID Number</div>
+                <div class="val">${p.idNumber}</div>
+              </td>
+            </tr>
+          </table>
+
+          <!-- PROVIDER INFO -->
+          <table class="info">
+            <tr class="caption-row">
+              <td colspan="2">بيانات مقدم الخدمة &nbsp; Provider Information</td>
+            </tr>
+            <tr>
+              <td style="width:66%">
+                <div class="lbl">المنشأة المقدمة للخدمة<br/>Provider Establishment</div>
+                <div class="val">${p.providerNameEn}${p.providerNameAr ? '<br/><span style="font-size:11px">'+p.providerNameAr+'</span>' : ''}</div>
+              </td>
+              <td>
+                <div class="lbl">رقم المنشأة في وزارة الموارد البشرية والتنمية الاجتماعية<br/>Establishment Number</div>
+                <div class="val">${p.providerEstablishmentNumber}</div>
+              </td>
+            </tr>
+          </table>
+
+          <!-- BENEFICIARY INFO -->
+          <table class="info">
+            <tr class="caption-row">
+              <td colspan="2">بيانات المستفيد من الخدمة &nbsp; Beneficiary Information</td>
+            </tr>
+            <tr>
+              <td style="width:66%">
+                <div class="lbl">المنشأة المستفيدة من الخدمة<br/>Beneficiary Establishment</div>
+                <div class="val">${p.beneficiaryNameEn}${p.beneficiaryNameAr ? '<br/><span style="font-size:11px">'+p.beneficiaryNameAr+'</span>' : ''}</div>
+              </td>
+              <td>
+                <div class="lbl">رقم المنشأة في وزارة الموارد البشرية والتنمية الاجتماعية<br/>Establishment Number</div>
+                <div class="val">${p.beneficiaryEstablishmentNumber}</div>
+              </td>
+            </tr>
+          </table>
+
+          <!-- PERMIT DATES -->
+          <table class="info">
+            <tr class="caption-row">
+              <td colspan="2">بيانات التصريح &nbsp; Permit Information</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="lbl">تاريخ بداية التصريح<br/>Permit Start Date</div>
+                <div class="val">${fmt(p.permitStartDate)}</div>
+              </td>
+              <td>
+                <div class="lbl">تاريخ نهاية التصريح<br/>Permit End Date</div>
+                <div class="val">${fmt(p.permitEndDate)}</div>
+              </td>
+            </tr>
+          </table>
+
+          <!-- DECLARATIONS -->
+          <div class="declarations">
+            <div class="decl-title">إقرارات</div>
+            <div class="decl-subtitle">أقر أنا المنشأة المقدمة للخدمة والموضحة بأعلى وأتعهد بـ:</div>
+            <ul>
+              <li>إن العامل حامل هذا التصريح يقر ويتعهد بأن البيانات المدونة فيه صحيحة على مسؤوليته الشخصية، وأنه يعمل لدى المنشأة ولحسابها بموجب رخصة إقامة سارية المفعول.</li>
+              <li>الالتزام والتقيد بأنظمة العمل والعمال والأفراد والأحوال الشخصية وأي أنظمة ولوائح وقرارات أخرى ذات علاقة.</li>
+              <li>إن الموقع الإلكتروني الخاص بأجير حلول الموارد البشرية متاح من قِبله أو القائمين عليه للتحقق مما هو وارد بهذا التصريح.</li>
+              <li>إن إلزام أصحاب الأعمال أو غيرهم على التعامل مع المنشأة فقط وبدون أي إلزام قانون أو غيره على التعامل مع موقع أجير.</li>
+              <li>أي تعديل أو كشط في هذا التصريح يجعله لاغياً.</li>
+            </ul>
+          </div>
+
+          <!-- FOOTER -->
+          <div class="footer">
+            "خدمة مقدمة من وزارة الموارد البشرية والتنمية الاجتماعية"
+          </div>
+        `;
+
+        // Generate QR code and set it
+        const verifyUrl = window.location.origin + "/verify/${id}";
+        // Use QR server API for client-side QR
+        document.getElementById("qr-img").src =
+          "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=" +
+          encodeURIComponent(window.location.origin + "/verify/${id}");
+
+        // Auto-print after a short delay
+        setTimeout(() => window.print(), 1200);
+      })
+      .catch(() => {
+        page.innerHTML = "<p style='text-align:center;color:red;padding:40px'>Permit not found</p>";
+      });
+  </script>
+</body>
+</html>
