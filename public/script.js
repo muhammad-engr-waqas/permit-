@@ -14,6 +14,9 @@ form.addEventListener("submit", async (e) => {
 
   const data = Object.fromEntries(new FormData(form).entries());
 
+  // Debug: log what we're sending
+  console.log("Sending data:", data);
+
   try {
     const res = await fetch("/api/permits", {
       method:  "POST",
@@ -21,14 +24,20 @@ form.addEventListener("submit", async (e) => {
       body:    JSON.stringify(data),
     });
 
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.error || "Failed to create permit");
+    // Try to parse response regardless of status
+    let json;
+    try { json = await res.json(); } catch(e) { json = {}; }
 
-    // Redirect same page to print — no popup blocker issue
+    console.log("Response status:", res.status, "Body:", json);
+
+    if (!res.ok) throw new Error(json.error || `Server error: ${res.status}`);
+
+    // Success — redirect to print page
     window.location.href = `/print/${json.id}`;
 
   } catch (err) {
-    statusMsg.textContent = "✘ خطأ: " + err.message;
+    console.error("Submit error:", err);
+    statusMsg.textContent = "✘ Error: " + err.message;
     statusMsg.classList.add("error");
     submitBtn.disabled  = false;
     btnText.textContent = "إنشاء وتنزيل PDF / Generate & Download PDF";
