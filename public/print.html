@@ -302,15 +302,18 @@
           </div>
         `;
 
-        // Generate QR code and set it
-        const verifyUrl = window.location.origin + "/verify/${id}";
-        // Use QR server API for client-side QR
+        // Generate QR code using the actual permit id
+        const verifyUrl = window.location.origin + "/verify/" + id;
         document.getElementById("qr-img").src =
           "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=" +
-          encodeURIComponent(window.location.origin + "/verify/${id}");
+          encodeURIComponent(verifyUrl);
 
-        // Auto-print after a short delay
-        setTimeout(() => window.print(), 1200);
+        // Auto-print after QR loads
+        document.getElementById("qr-img").onload = () => {
+          setTimeout(() => window.print(), 800);
+        };
+        // Fallback if onload doesn't fire
+        setTimeout(() => window.print(), 2000);
       })
       .catch(() => {
         page.innerHTML = "<p style='text-align:center;color:red;padding:40px'>Permit not found</p>";
