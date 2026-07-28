@@ -24,17 +24,12 @@ form.addEventListener("submit", async (e) => {
     const json = await res.json();
     if (!res.ok) throw new Error(json.error || "Failed to create permit");
 
-    // Open the print page in a new tab — browser will print/save as PDF
-    window.open(`/print/${json.id}`, "_blank");
-
-    statusMsg.textContent = "✔ تم إنشاء التصريح! / Permit created — printing...";
-    statusMsg.classList.add("success");
-    form.reset();
+    // Redirect same page to print — no popup blocker issue
+    window.location.href = `/print/${json.id}`;
 
   } catch (err) {
     statusMsg.textContent = "✘ خطأ: " + err.message;
     statusMsg.classList.add("error");
-  } finally {
     submitBtn.disabled  = false;
     btnText.textContent = "إنشاء وتنزيل PDF / Generate & Download PDF";
     spinner.classList.remove("show");
