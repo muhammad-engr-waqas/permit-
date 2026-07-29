@@ -23,8 +23,14 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: `Missing fields: ${missing.join(", ")}` });
     }
 
-    const permit = await Permit.create(req.body);
-    console.log("Permit created:", permit._id);
+    const permitData = { ...req.body };
+    if (!permitData.permitCode || permitData.permitCode.trim() === "") {
+      const randomDigits = Math.floor(1000000 + Math.random() * 9000000);
+      permitData.permitCode = "TW" + randomDigits;
+    }
+
+    const permit = await Permit.create(permitData);
+    console.log("Permit created:", permit._id, "permitCode:", permit.permitCode);
     res.json({ id: permit._id });
 
   } catch (err) {

@@ -26,6 +26,9 @@ const permitSchema = new mongoose.Schema(
     beneficiaryNameAr: { type: String, trim: true },
     beneficiaryEstablishmentNumber: { type: String, required: true, trim: true },
 
+    // ----- Permit Reference Code (e.g. TW6617332) -----
+    permitCode: { type: String, trim: true },
+
     // ----- Permit Information / بيانات التصريح -----
     permitStartDate: { type: Date, required: true },
     permitEndDate: { type: Date, required: true },

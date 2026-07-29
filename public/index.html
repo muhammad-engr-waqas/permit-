@@ -15,50 +15,65 @@
       <fieldset>
         <legend>بيانات العامل / Laborer Information</legend>
 
-        <label>Laborer Name (English)
-          <input type="text" name="laborerNameEn" required placeholder="MUHAMMAD WAQAS ABDUL MALIK" />
+        <label>اسم العامل (English)
+          <input type="text" name="laborerNameEn" required value="HAMID KHAN" placeholder="HAMID KHAN" />
         </label>
-        <label>اسم العامل (Arabic - optional)
-          <input type="text" name="laborerNameAr" />
+        <label>اسم العامل (Arabic)
+          <input type="text" name="laborerNameAr" value="حامد خان" placeholder="حامد خان" />
         </label>
-        <label>Occupation (English)
-          <input type="text" name="occupationEn" required placeholder="Heavy Truck Driver" />
+        <label>المهنة (English)
+          <input type="text" name="occupationEn" required value="Construction Worker" placeholder="Construction Worker" />
         </label>
-        <label>Nationality (English)
-          <input type="text" name="nationalityEn" required placeholder="Pakistani" />
+        <label>المهنة (Arabic)
+          <input type="text" name="occupationAr" value="عامل بناء" placeholder="عامل بناء" />
         </label>
-        <label>ID / Iqama Number
-          <input type="text" name="idNumber" required placeholder="2604732350" />
+        <label>الجنسية (English)
+          <input type="text" name="nationalityEn" required value="Pakistani" placeholder="Pakistani" />
+        </label>
+        <label>الجنسية (Arabic)
+          <input type="text" name="nationalityAr" value="باكستاني" placeholder="باكستاني" />
+        </label>
+        <label>رقم الهوية / الإقامة (ID / Iqama Number)
+          <input type="text" name="idNumber" required value="2558239725" placeholder="2558239725" />
         </label>
       </fieldset>
 
       <fieldset>
         <legend>بيانات مقدم الخدمة / Provider Establishment</legend>
-        <label>Provider Name
-          <input type="text" name="providerNameEn" required placeholder="Naas HR Solutions Company" />
+        <label>اسم المنشأة (English)
+          <input type="text" name="providerNameEn" required value="Mubarak Al-Otaibi Est." placeholder="Mubarak Al-Otaibi Est." />
         </label>
-        <label>Establishment Number
-          <input type="text" name="providerEstablishmentNumber" required placeholder="1-373379" />
+        <label>المنشأة المقدمة للخدمة (Arabic)
+          <input type="text" name="providerNameAr" value="مؤسسة مبارك العضيبي" placeholder="مؤسسة مبارك العضيبي" />
+        </label>
+        <label>رقم المنشأة في وزارة الموارد البشرية (Establishment Number)
+          <input type="text" name="providerEstablishmentNumber" required value="6-3472812" placeholder="6-3472812" />
         </label>
       </fieldset>
 
       <fieldset>
         <legend>بيانات المستفيد من الخدمة / Beneficiary Establishment</legend>
-        <label>Beneficiary Name
-          <input type="text" name="beneficiaryNameEn" required placeholder="AFS Limited Company" />
+        <label>اسم المنشأة (English)
+          <input type="text" name="beneficiaryNameEn" required value="Arabian Talent Group Co." placeholder="Arabian Talent Group Co." />
         </label>
-        <label>Establishment Number
-          <input type="text" name="beneficiaryEstablishmentNumber" required placeholder="9-1960233" />
+        <label>المنشأة المستفيدة من الخدمة (Arabic)
+          <input type="text" name="beneficiaryNameAr" value="شركة مجموعة المواهب العربية الخاصة المحدودة" placeholder="شركة مجموعة المواهب العربية الخاصة المحدودة" />
+        </label>
+        <label>رقم المنشأة في وزارة الموارد البشرية (Establishment Number)
+          <input type="text" name="beneficiaryEstablishmentNumber" required value="9-4031274" placeholder="9-4031274" />
         </label>
       </fieldset>
 
       <fieldset>
         <legend>بيانات التصريح / Permit Information</legend>
-        <label>Permit Start Date
-          <input type="date" name="permitStartDate" required />
+        <label>رقم التصريح (Permit Code e.g. TW6617332)
+          <input type="text" name="permitCode" value="TW6617332" placeholder="TW6617332" />
         </label>
-        <label>Permit End Date
-          <input type="date" name="permitEndDate" required />
+        <label>تاريخ بداية التصريح (Permit Start Date)
+          <input type="date" name="permitStartDate" required value="2026-07-04" />
+        </label>
+        <label>تاريخ نهاية التصريح (Permit End Date)
+          <input type="date" name="permitEndDate" required value="2026-11-03" />
         </label>
       </fieldset>
 
