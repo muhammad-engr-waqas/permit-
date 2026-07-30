@@ -45,6 +45,28 @@ input {
 }
 input:focus { outline: none; border-color: #0f766e; }
 
+/* Arabic fields — right-to-left */
+input[name$="Ar"],
+input[name="nationalityAr"] {
+  direction: rtl;
+  text-align: right;
+  font-size: 14px;
+  background: #f9fffe;
+  border-color: #a7f3d0;
+}
+input[name$="Ar"]:focus {
+  border-color: #0f766e;
+  background: #fff;
+}
+
+/* Translation hint text */
+.translate-hint {
+  font-size: 11px;
+  color: #0f766e;
+  margin-top: 2px;
+  display: inline-block;
+}
+
 button {
   width: 100%;
   background: #0f766e;

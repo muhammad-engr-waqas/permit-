@@ -4,6 +4,81 @@ const submitBtn = document.getElementById("submitBtn");
 const btnText   = document.getElementById("btnText");
 const spinner   = document.getElementById("spinner");
 
+/* ══════════════════════════════════════════════
+   AUTO-TRANSLATE: English → Arabic
+   Each En→Ar pair: [englishInputName, arabicInputName]
+══════════════════════════════════════════════ */
+const translatePairs = [
+  ["laborerNameEn",               "laborerNameAr"],
+  ["occupationEn",                "occupationAr"],
+  ["nationalityEn",               "nationalityAr"],
+  ["providerNameEn",              "providerNameAr"],
+  ["beneficiaryNameEn",           "beneficiaryNameAr"],
+];
+
+// Debounce helper — waits `delay` ms after user stops typing
+function debounce(fn, delay) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+// Call MyMemory free translation API (no key needed)
+async function translateToArabic(text) {
+  if (!text || !text.trim()) return "";
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.trim())}&langpair=en|ar`;
+  const res  = await fetch(url);
+  const data = await res.json();
+  if (data.responseStatus === 200) {
+    return data.responseData.translatedText || "";
+  }
+  return "";
+}
+
+// Wire up each pair
+translatePairs.forEach(([enName, arName]) => {
+  const enInput = form.querySelector(`[name="${enName}"]`);
+  const arInput = form.querySelector(`[name="${arName}"]`);
+  if (!enInput || !arInput) return;
+
+  // Create a small status label under the Arabic field
+  const hint = document.createElement("span");
+  hint.style.cssText = "font-size:11px;color:#0f766e;display:none;margin-top:2px;";
+  arInput.parentNode.appendChild(hint);
+
+  const doTranslate = debounce(async (value) => {
+    if (!value.trim()) { arInput.value = ""; return; }
+    hint.textContent = "⏳ Translating...";
+    hint.style.display = "inline";
+    arInput.style.borderColor = "#0f766e";
+    try {
+      const arabic = await translateToArabic(value);
+      if (arabic) {
+        arInput.value = arabic;
+        arInput.style.direction = "rtl";
+        hint.textContent = "✔ Auto-translated";
+        setTimeout(() => { hint.style.display = "none"; }, 2000);
+      } else {
+        hint.textContent = "⚠ Could not translate";
+        setTimeout(() => { hint.style.display = "none"; }, 2000);
+      }
+    } catch (err) {
+      hint.textContent = "⚠ Translation failed";
+      setTimeout(() => { hint.style.display = "none"; }, 2000);
+    }
+    arInput.style.borderColor = "";
+  }, 700); // 700 ms after user stops typing
+
+  enInput.addEventListener("input", (e) => {
+    doTranslate(e.target.value);
+  });
+});
+
+/* ══════════════════════════════════════════════
+   FORM SUBMIT
+══════════════════════════════════════════════ */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
