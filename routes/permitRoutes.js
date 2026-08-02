@@ -13,8 +13,8 @@ router.post("/", async (req, res) => {
     // Validate required fields manually and return clear errors
     const required = [
       "laborerNameEn", "occupationEn", "nationalityEn", "idNumber",
-      "providerNameEn", "providerEstablishmentNumber",
-      "beneficiaryNameEn", "beneficiaryEstablishmentNumber",
+      "providerNameAr", "providerEstablishmentNumber",
+      "beneficiaryNameAr", "beneficiaryEstablishmentNumber",
       "permitStartDate", "permitEndDate"
     ];
 
@@ -23,10 +23,37 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: `Missing fields: ${missing.join(", ")}` });
     }
 
+    // FIX 4: Duplicate idNumber (Iqama) check — reject if same ID already has an active permit
+    const existingId = await Permit.findOne({ idNumber: req.body.idNumber.trim() });
+    if (existingId) {
+      return res.status(400).json({
+        error: `تصريح موجود مسبقاً لهذا الرقم / A permit already exists for this ID number: ${req.body.idNumber}`
+      });
+    }
+
     const permitData = { ...req.body };
+
+    // FIX 4: Generate a truly unique permitCode — loop until DB confirms no duplicate
     if (!permitData.permitCode || permitData.permitCode.trim() === "") {
-      const randomDigits = Math.floor(1000000 + Math.random() * 9000000);
-      permitData.permitCode = "TW" + randomDigits;
+      let isUnique = false;
+      let candidateCode;
+      let attempts = 0;
+      while (!isUnique && attempts < 20) {
+        const randomDigits = Math.floor(1000000 + Math.random() * 9000000);
+        candidateCode = "TW" + randomDigits;
+        const existing = await Permit.findOne({ permitCode: candidateCode });
+        if (!existing) isUnique = true;
+        attempts++;
+      }
+      permitData.permitCode = candidateCode;
+    } else {
+      // If caller supplied a custom permitCode, verify it's not already used
+      const existingCode = await Permit.findOne({ permitCode: permitData.permitCode.trim() });
+      if (existingCode) {
+        return res.status(400).json({
+          error: `رقم التصريح مستخدم مسبقاً / Permit code already in use: ${permitData.permitCode}`
+        });
+      }
     }
 
     const permit = await Permit.create(permitData);

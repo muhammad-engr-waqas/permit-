@@ -77,6 +77,39 @@ translatePairs.forEach(([enName, arName]) => {
 });
 
 /* ══════════════════════════════════════════════
+   ARABIC-IN-ENGLISH GUARD for اسم العامل
+   If user types Arabic in the English name field,
+   show a clear warning — PDF shows this field only.
+══════════════════════════════════════════════ */
+(function() {
+  var enNameInput = form.querySelector('[name="laborerNameEn"]');
+  if (!enNameInput) return;
+
+  // Create warning element
+  var warn = document.createElement("div");
+  warn.style.cssText = "display:none;background:#fff3cd;border:1px solid #ffc107;color:#856404;padding:6px 10px;border-radius:4px;font-size:12px;margin-top:4px;";
+  warn.innerHTML = "⚠️ <strong>يرجى كتابة الاسم بالحروف اللاتينية فقط</strong> — هذا الحقل يظهر في PDF<br><small>Please type in English/Latin letters only (e.g. WAQAS ALI)</small>";
+  enNameInput.parentNode.appendChild(warn);
+
+  function hasArabic(str) {
+    return /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(str);
+  }
+
+  enNameInput.addEventListener("input", function() {
+    if (hasArabic(this.value)) {
+      warn.style.display = "block";
+      this.style.borderColor = "#ffc107";
+      this.style.background  = "#fffdf0";
+    } else {
+      warn.style.display = "none";
+      this.style.borderColor = "";
+      this.style.background  = "";
+    }
+  });
+})();
+
+
+/* ══════════════════════════════════════════════
    FORM SUBMIT
 ══════════════════════════════════════════════ */
 form.addEventListener("submit", async (e) => {

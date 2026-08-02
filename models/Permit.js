@@ -17,17 +17,18 @@ const permitSchema = new mongoose.Schema(
     idNumber: { type: String, required: true, trim: true },
 
     // ----- Provider Establishment / بيانات مقدم الخدمة -----
-    providerNameEn: { type: String, required: true, trim: true },
-    providerNameAr: { type: String, trim: true },
+    providerNameEn: { type: String, trim: true },
+    providerNameAr: { type: String, required: true, trim: true },
     providerEstablishmentNumber: { type: String, required: true, trim: true },
 
     // ----- Beneficiary Establishment / بيانات المستفيد من الخدمة -----
-    beneficiaryNameEn: { type: String, required: true, trim: true },
-    beneficiaryNameAr: { type: String, trim: true },
+    beneficiaryNameEn: { type: String, trim: true },
+    beneficiaryNameAr: { type: String, required: true, trim: true },
     beneficiaryEstablishmentNumber: { type: String, required: true, trim: true },
 
     // ----- Permit Reference Code (e.g. TW6617332) -----
-    permitCode: { type: String, trim: true },
+    // FIX 4: unique:true ensures DB-level guarantee against duplicate permit codes
+    permitCode: { type: String, trim: true, unique: true, sparse: true },
 
     // ----- Permit Information / بيانات التصريح -----
     permitStartDate: { type: Date, required: true },

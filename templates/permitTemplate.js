@@ -23,15 +23,29 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
 <meta charset="UTF-8" />
 <title>تصريح أجير - الإعارة - ${permit._id}</title>
 <style>
-  @page { size: A4 portrait; margin: 10mm 12mm; }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  @page { size: A4 portrait; margin: 0; }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
   body {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    /* FIX 3: Tahoma/Arial supports both Arabic & Latin glyphs with consistent visual weight */
+    font-family: Tahoma, Arial, "Segoe UI", sans-serif;
     background: #fff;
     color: #000;
-    font-size: 11px;
+    font-size: 10.5px;
     line-height: 1.4;
-    padding: 24px 32px;
+  }
+  .page {
+    width: 88%;
+    margin: 0 auto;
+    padding: 40px 0;
+    min-height: 297mm;
+    display: flex;
+    flex-direction: column;
   }
 
   /* ── HEADER ── */
@@ -39,9 +53,9 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid #c8d1dc;
-    padding: 12px 18px;
-    margin-bottom: 24px;
+    border: 1px solid #D7D7D7;
+    padding: 8px 14px;
+    margin-bottom: 15px;
     direction: ltr;
   }
   .header-left {
@@ -49,16 +63,16 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 130px;
+    width: 100px;
     flex-shrink: 0;
   }
   .header-left img {
-    width: 90px;
-    height: 90px;
+    width: 70px;
+    height: 70px;
     display: block;
   }
   .header-left .code-text {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     margin-top: 4px;
     letter-spacing: 0.5px;
@@ -69,7 +83,7 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 21px;
+    font-size: 16px;
     font-weight: 700;
     color: #000;
     text-align: center;
@@ -82,25 +96,25 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: 12px;
     flex-shrink: 0;
     direction: ltr;
   }
   .logo-ajeer {
-    height: 46px;
+    height: 36px;
     width: auto;
   }
   .logo-ministry {
-    height: 50px;
+    height: 40px;
     width: auto;
   }
 
   /* ── NOTICE TEXT ── */
   .notice-text {
-    font-size: 11.5px;
+    font-size: 11px;
     line-height: 1.95;
     text-align: justify;
-    margin-bottom: 22px;
+    margin-bottom: 15px;
     color: #111;
     direction: rtl;
   }
@@ -109,55 +123,69 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
   table.permit-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 16px;
-    font-size: 11px;
+    margin-bottom: 10px;
+    font-size: 10.5px;
     direction: rtl;
   }
   table.permit-table th {
-    background: #eef2f5;
-    border: 1px solid #c8d1dc;
+    background: #ECF0F0;
+    border: 1px solid #D7D7D7;
     text-align: center;
     font-weight: 700;
-    font-size: 12.5px;
+    font-size: 12px;
     padding: 6px 10px;
-    color: #1a1a1a;
+    color: #000000;
   }
   table.permit-table td {
-    border: 1px solid #c8d1dc;
-    padding: 8px 12px;
+    border: 1px solid #D7D7D7;
+    padding: 6px 10px;
+    /* FIX 2: auto height — cell expands with content, no fixed height */
     vertical-align: middle;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    height: auto;
   }
   .lbl-col {
     width: 25%;
-    background: #fff;
-    font-weight: 600;
-    color: #222;
+    background: #ECF0F0;
+    font-weight: normal;
+    color: #000000;
     font-size: 10.5px;
+    text-align: right;
+    line-height: 1.35;
+    /* FIX 3: same font stack as body */
+    font-family: Tahoma, Arial, "Segoe UI", sans-serif;
   }
   .val-col {
     width: 25%;
     background: #fff;
-    font-weight: 400;
-    color: #1a1a1a;
-    font-size: 11px;
-    text-align: center;
+    font-weight: normal;
+    color: #000000;
+    font-size: 10.5px;
+    /* FIX 1: Always RTL + right-aligned so English names stay consistent with Arabic RTL table */
+    direction: rtl;
+    text-align: right;
+    line-height: 1.35;
+    /* FIX 3: same font stack handles both Arabic & Latin glyphs */
+    font-family: Tahoma, Arial, "Segoe UI", sans-serif;
   }
 
   /* ── DECLARATIONS ── */
   .declarations {
-    margin-top: 20px;
+    margin-top: 15px;
     direction: rtl;
   }
   .decl-main-title {
-    font-size: 13.5px;
+    font-size: 12.5px;
     font-weight: 700;
     text-align: center;
     margin-bottom: 12px;
     color: #000;
   }
   .decl-sub-title {
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 10.5px;
+    font-weight: bold;
     margin-bottom: 8px;
     color: #1a1a1a;
   }
@@ -184,20 +212,22 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
 
   /* ── FOOTER ── */
   .page-footer {
-    margin-top: 45px;
+    margin-top: auto;
     text-align: center;
-    font-size: 10.5px;
+    font-size: 10px;
     color: #333;
     direction: rtl;
     line-height: 1.85;
+    padding-top: 20px;
   }
   .page-footer .approved-text {
-    font-weight: 600;
+    font-weight: normal;
     margin-top: 2px;
   }
 </style>
 </head>
 <body>
+<div class="page">
 
   <!-- HEADER -->
   <div class="header-container">
@@ -217,15 +247,14 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
     نشعركم أنه تم التعاقد من قبلنا كجهة مقدمة للخدمة مع الجهة المستفيدة من الخدمة حسب المعلومات المبينة أدناه، ولذلك تم تسجيل معلومات العقد لتكون بحوزة العامل لإثبات عدم مخالفته لنظام العمل ولتقديمها إلى من يهمه الأمر من الجهات المختصة عند طلبها للتحقق من صحة تواجده في مكان تقديم الخدمة
   </div>
 
-  <!-- TABLE 1 -->
+  <!-- UNIFIED PERMIT TABLE -->
   <table class="permit-table">
-    <thead>
-      <tr><th colspan="4">بيانات العامل</th></tr>
-    </thead>
     <tbody>
+      <!-- SECTION 1: Laborer Information -->
+      <tr><th colspan="4">بيانات العامل</th></tr>
       <tr>
         <td class="lbl-col">اسم العامل</td>
-        <td class="val-col">${permit.laborerNameAr || permit.laborerNameEn || ''}</td>
+        <td class="val-col">${permit.laborerNameEn || ''}</td>
         <td class="lbl-col">المهنة</td>
         <td class="val-col">${permit.occupationAr || permit.occupationEn || ''}</td>
       </tr>
@@ -235,45 +264,27 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
         <td class="lbl-col">الجنسية</td>
         <td class="val-col">${permit.nationalityAr || permit.nationalityEn || ''}</td>
       </tr>
-    </tbody>
-  </table>
 
-  <!-- TABLE 2 -->
-  <table class="permit-table">
-    <thead>
+      <!-- SECTION 2: Provider Information -->
       <tr><th colspan="4">بيانات مقدم الخدمة</th></tr>
-    </thead>
-    <tbody>
       <tr>
         <td class="lbl-col">المنشأة المقدمة للخدمة</td>
-        <td class="val-col">${permit.providerNameAr || permit.providerNameEn || ''}</td>
+        <td class="val-col">${permit.providerNameAr || ''}</td>
         <td class="lbl-col">رقم المنشأة في وزارة الموارد البشرية و التنمية الإجتماعية</td>
         <td class="val-col">${permit.providerEstablishmentNumber || ''}</td>
       </tr>
-    </tbody>
-  </table>
 
-  <!-- TABLE 3 -->
-  <table class="permit-table">
-    <thead>
+      <!-- SECTION 3: Beneficiary Information -->
       <tr><th colspan="4">بيانات المستفيد من الخدمة</th></tr>
-    </thead>
-    <tbody>
       <tr>
         <td class="lbl-col">المنشأة المستفيدة من الخدمة</td>
-        <td class="val-col">${permit.beneficiaryNameAr || permit.beneficiaryNameEn || ''}</td>
+        <td class="val-col">${permit.beneficiaryNameAr || ''}</td>
         <td class="lbl-col">رقم المنشأة في وزارة الموارد البشرية و التنمية الإجتماعية</td>
         <td class="val-col">${permit.beneficiaryEstablishmentNumber || ''}</td>
       </tr>
-    </tbody>
-  </table>
 
-  <!-- TABLE 4 -->
-  <table class="permit-table">
-    <thead>
+      <!-- SECTION 4: Permit Dates -->
       <tr><th colspan="4">بيانات التصريح</th></tr>
-    </thead>
-    <tbody>
       <tr>
         <td class="lbl-col">تاريخ بداية التصريح</td>
         <td class="val-col">${formatDate(permit.permitStartDate)}</td>
@@ -302,6 +313,7 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
     <div class="approved-text">* خدمة معتمدة من وزارة الموارد البشرية والتنمية الإجتماعية *</div>
   </div>
 
+</div>
 </body>
 </html>
 `;

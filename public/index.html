@@ -15,23 +15,20 @@
       <fieldset>
         <legend>بيانات العامل / Laborer Information</legend>
 
-        <label>اسم العامل (English)
-          <input type="text" name="laborerNameEn" required placeholder="e.g. HAMID KHAN" />
+        <label>اسم العامل — English ⚠️ يظهر في PDF (مطلوب)
+          <input type="text" name="laborerNameEn" required placeholder="e.g. WAQAS ALI" style="text-transform:uppercase;" />
         </label>
-        <label>اسم العامل (Arabic)
-          <input type="text" name="laborerNameAr" placeholder="e.g. حامد خان" />
-        </label>
-        <label>المهنة (English)
+        <label>المهنة — Occupation English (مطلوب)
           <input type="text" name="occupationEn" required placeholder="e.g. Construction Worker" />
         </label>
-        <label>المهنة (Arabic)
-          <input type="text" name="occupationAr" placeholder="e.g. عامل بناء" />
+        <label>المهنة — Arabic (optional)
+          <input type="text" name="occupationAr" placeholder="e.g. عامل بناء" dir="rtl" />
         </label>
-        <label>الجنسية (English)
+        <label>الجنسية — Nationality English (مطلوب)
           <input type="text" name="nationalityEn" required placeholder="e.g. Pakistani" />
         </label>
-        <label>الجنسية (Arabic)
-          <input type="text" name="nationalityAr" placeholder="e.g. باكستاني" />
+        <label>الجنسية — Arabic (optional)
+          <input type="text" name="nationalityAr" placeholder="e.g. باكستاني" dir="rtl" />
         </label>
         <label>رقم الهوية / الإقامة (ID / Iqama Number)
           <input type="text" name="idNumber" required placeholder="e.g. 2558239725" />
@@ -40,11 +37,11 @@
 
       <fieldset>
         <legend>بيانات مقدم الخدمة / Provider Establishment</legend>
-        <label>اسم المنشأة (English)
-          <input type="text" name="providerNameEn" required placeholder="e.g. Mubarak Al-Otaibi Est." />
+        <label>المنشأة المقدمة للخدمة — Arabic (مطلوب)
+          <input type="text" name="providerNameAr" required placeholder="e.g. مؤسسة مبارك العضيبي" dir="rtl" />
         </label>
-        <label>المنشأة المقدمة للخدمة (Arabic)
-          <input type="text" name="providerNameAr" placeholder="e.g. مؤسسة مبارك العضيبي" />
+        <label>اسم المنشأة — English (optional)
+          <input type="text" name="providerNameEn" placeholder="e.g. Mubarak Al-Otaibi Est." />
         </label>
         <label>رقم المنشأة في وزارة الموارد البشرية (Establishment Number)
           <input type="text" name="providerEstablishmentNumber" required placeholder="e.g. 6-3472812" />
@@ -53,11 +50,11 @@
 
       <fieldset>
         <legend>بيانات المستفيد من الخدمة / Beneficiary Establishment</legend>
-        <label>اسم المنشأة (English)
-          <input type="text" name="beneficiaryNameEn" required placeholder="e.g. Arabian Talent Group Co." />
+        <label>المنشأة المستفيدة من الخدمة — Arabic (مطلوب)
+          <input type="text" name="beneficiaryNameAr" required placeholder="e.g. شركة مجموعة المواهب العربية الخاصة المحدودة" dir="rtl" />
         </label>
-        <label>المنشأة المستفيدة من الخدمة (Arabic)
-          <input type="text" name="beneficiaryNameAr" placeholder="e.g. شركة مجموعة المواهب العربية الخاصة المحدودة" />
+        <label>اسم المنشأة — English (optional)
+          <input type="text" name="beneficiaryNameEn" placeholder="e.g. Arabian Talent Group Co." />
         </label>
         <label>رقم المنشأة في وزارة الموارد البشرية (Establishment Number)
           <input type="text" name="beneficiaryEstablishmentNumber" required placeholder="e.g. 9-4031274" />
