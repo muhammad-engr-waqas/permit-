@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <title>تصريح أجير - الإعارة</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      /* FIX 3: Tahoma/Arial supports both Arabic & Latin glyphs with consistent visual weight */
-      font-family: Tahoma, Arial, "Segoe UI", sans-serif;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
       background: #e8e8e8;
       padding: 20px;
-      color: #000;
-      font-size: 10.5px;
-      line-height: 1.4;
+      direction: rtl;
     }
 
     .no-print {
@@ -21,378 +18,327 @@
       margin-bottom: 16px;
     }
     .btn-print {
-      background: #1a2e5a;
+      background: #1a5276;
       color: #fff;
       border: none;
-      padding: 10px 36px;
-      border-radius: 6px;
+      padding: 10px 32px;
+      border-radius: 5px;
       font-size: 14px;
       cursor: pointer;
       font-weight: 600;
-      letter-spacing: 0.5px;
     }
-    .btn-print:hover { background: #0f1e3d; }
 
     /* ── A4 PAGE ── */
     .page {
       background: #fff;
       width: 794px;
-      min-height: 1123px;
+      min-height: 1122px;
       margin: 0 auto;
-      padding: 32px 40px 32px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
-      position: relative;
-      display: flex;
-      flex-direction: column;
+      padding: 28px 32px 32px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.18);
+      font-size: 11px;
+      color: #1a1a1a;
     }
 
-    /* ── HEADER ── */
-    .header-container {
+    /* ── TOP HEADER ── */
+    .top-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border: 1px solid #D7D7D7;
-      padding: 8px 14px;
-      margin-bottom: 15px;
-      direction: ltr; /* Keeps QR left, title middle, logos right */
+      border: 1px solid #bbb;
+      padding: 10px 14px;
+      margin-bottom: 20px;
     }
-
-    /* Left: QR Code + Code */
-    .header-left {
+    .qr-section {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      width: 100px;
-      flex-shrink: 0;
+      gap: 4px;
     }
-    .header-left img {
-      width: 70px;
-      height: 70px;
-      display: block;
+    .qr-section img {
+      width: 80px;
+      height: 80px;
     }
-    .header-left .code-text {
-      font-size: 10px;
-      font-weight: 700;
-      margin-top: 4px;
-      letter-spacing: 0.5px;
-      color: #1a1a1a;
-    }
-
-    /* Center: Title */
-    .header-center {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      font-weight: 700;
-      color: #000;
+    .permit-number {
+      font-size: 9px;
+      color: #444;
       text-align: center;
-      flex-grow: 1;
-      padding: 0 15px;
-      direction: rtl;
     }
 
-    /* Right: Logos */
-    .header-right {
+    .center-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1a1a;
+      text-align: center;
+      flex: 1;
+      padding: 0 20px;
+    }
+
+    .right-logos {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 12px;
-      flex-shrink: 0;
-      direction: ltr;
+      gap: 10px;
     }
-    .logo-ajeer {
-      height: 36px;
+    /* Ministry logo SVG */
+    .ministry-svg {
+      height: 54px;
       width: auto;
     }
-    .logo-ministry {
-      height: 40px;
+    /* Ajeer logo */
+    .ajeer-logo-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .ajeer-svg {
+      height: 54px;
       width: auto;
     }
 
-    /* ── NOTICE INTRO TEXT ── */
-    .notice-text {
+    /* ── INTRO ── */
+    .intro-text {
       font-size: 11px;
       line-height: 1.95;
       text-align: justify;
-      margin-bottom: 15px;
-      color: #111;
-      direction: rtl;
+      color: #1a1a1a;
+      margin-bottom: 16px;
     }
 
-    /* ── TABLES ── */
-    table.permit-table {
+    /* ── INFO TABLES ── */
+    table.info {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 10px;
-      font-size: 10.5px;
-      direction: rtl;
+      margin-bottom: 6px;
+      font-size: 11px;
     }
-    table.permit-table th {
-      background: #ECF0F0;
-      border: 1px solid #D7D7D7;
+    table.info .section-header td {
+      background: #f5f5f5;
+      border: 1px solid #aaa;
       text-align: center;
       font-weight: 700;
       font-size: 12px;
-      padding: 6px 10px;
-      color: #000000;
+      padding: 5px 8px;
+      color: #1a1a1a;
     }
-    table.permit-table td {
-      border: 1px solid #D7D7D7;
-      padding: 6px 10px;
-      /* FIX 2: auto height — cell expands with content, no fixed height */
+    table.info td {
+      border: 1px solid #bbb;
+      padding: 7px 10px;
       vertical-align: middle;
-      white-space: normal;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      height: auto;
     }
-
-    .lbl-col {
-      width: 25%;
-      background: #ECF0F0;
-      font-weight: normal;
-      color: #000000;
-      font-size: 10.5px;
-      text-align: right;
-      line-height: 1.35;
-      /* FIX 3: same font stack as body */
-      font-family: Tahoma, Arial, "Segoe UI", sans-serif;
+    .lbl {
+      font-size: 10px;
+      color: #555;
+      margin-bottom: 2px;
     }
-    .val-col {
-      width: 25%;
-      background: #fff;
-      font-weight: normal;
-      color: #000000;
-      font-size: 10.5px;
-      /* FIX 1: Always RTL + right-aligned so English names stay consistent with Arabic RTL table */
-      direction: rtl;
-      text-align: right;
-      line-height: 1.35;
-      /* FIX 3: same font stack handles both Arabic & Latin glyphs */
-      font-family: Tahoma, Arial, "Segoe UI", sans-serif;
+    .val {
+      font-weight: 600;
+      font-size: 11.5px;
+      color: #111;
     }
 
     /* ── DECLARATIONS ── */
-    .declarations {
-      margin-top: 15px;
+    .decl-section {
+      margin-top: 14px;
       direction: rtl;
     }
     .decl-main-title {
-      font-size: 12.5px;
-      font-weight: 700;
       text-align: center;
-      margin-bottom: 12px;
-      color: #000;
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 10px;
     }
-    .decl-sub-title {
-      font-size: 10.5px;
-      font-weight: bold;
+    .decl-sub {
+      font-weight: 700;
+      font-size: 11.5px;
       margin-bottom: 8px;
-      color: #1a1a1a;
     }
     .decl-list {
-      list-style: none;
-      padding-right: 0;
-      line-height: 2.05;
-      font-size: 10.5px;
-      color: #111;
+      list-style: disc;
+      padding-right: 22px;
+      font-size: 11px;
+      line-height: 2;
+      color: #1a1a1a;
     }
     .decl-list li {
-      margin-bottom: 5px;
-      position: relative;
-      padding-right: 14px;
-      text-align: justify;
-    }
-    .decl-list li::before {
-      content: "•";
-      position: absolute;
-      right: 0;
-      top: 0;
-      font-size: 13px;
+      margin-bottom: 2px;
     }
 
     /* ── FOOTER ── */
     .page-footer {
-      margin-top: auto;
+      margin-top: 32px;
       text-align: center;
-      font-size: 10px;
+      font-size: 10.5px;
       color: #333;
-      direction: rtl;
-      line-height: 1.85;
-      padding-top: 20px;
-    }
-    .page-footer .link-text {
-      color: #333;
-    }
-    .page-footer .approved-text {
-      font-weight: normal;
-      margin-top: 2px;
+      border-top: 1px solid #ddd;
+      padding-top: 10px;
+      line-height: 1.8;
     }
 
-    /* ── PRINT MEDIA ── */
+    /* ── PRINT ── */
     @media print {
-      body {
-        background: #fff;
-        padding: 0;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
+      body { background: #fff; padding: 0; }
       .no-print { display: none !important; }
       .page {
         box-shadow: none;
-        width: 88%;
-        margin: 0 auto;
-        padding: 40px 0;
-        min-height: 297mm;
-        display: flex;
-        flex-direction: column;
+        width: 100%;
+        margin: 0;
+        padding: 14px 18px;
+        min-height: unset;
       }
-      @page { size: A4 portrait; margin: 0; }
-      th, td, .lbl-col {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
+      @page { size: A4 portrait; margin: 8mm 8mm; }
     }
   </style>
 </head>
 <body>
 
-  <div class="no-print">
-    <button class="btn-print" onclick="window.print()">🖨️ Save as PDF / طباعة</button>
-  </div>
+<div class="no-print">
+  <button class="btn-print" onclick="window.print()">🖨️ Save as PDF / طباعة</button>
+</div>
 
-  <div class="page" id="permit-page">
-    <p style="text-align:center;color:#888;padding:60px 0;">جاري التحميل... Loading...</p>
-  </div>
+<div class="page" id="permit-page">
+  <p style="text-align:center;color:#888;padding:80px 0;font-size:14px;">جاري التحميل... Loading...</p>
+</div>
 
-  <script>
-    var id   = window.location.pathname.split("/").pop();
-    var page = document.getElementById("permit-page");
+<script>
+  var id   = window.location.pathname.split("/").pop();
+  var page = document.getElementById("permit-page");
 
-    function fmt(d) {
-      if (!d) return "";
-      var dt = new Date(d);
-      return dt.getFullYear() + "-" +
-        String(dt.getMonth() + 1).padStart(2, "0") + "-" +
-        String(dt.getDate()).padStart(2, "0");
-    }
+  function fmt(d) {
+    if (!d) return "";
+    var dt = new Date(d);
+    return dt.getFullYear() + "-" +
+      String(dt.getMonth()+1).padStart(2,"0") + "-" +
+      String(dt.getDate()).padStart(2,"0");
+  }
 
-    fetch("/api/permits/" + id)
-      .then(function(r) {
-        if (!r.ok) throw new Error("Not found");
-        return r.json();
-      })
-      .then(function(p) {
+  /* ── Ministry logo SVG (palm/flower + Arabic text) ── */
+  var ministrySVG =
+    '<svg class="ministry-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 60">' +
+      /* flower icon */
+      '<g transform="translate(138,4) scale(0.52)">' +
+        '<path d="M26,0 Q30,14 20,18 Q14,8 0,8 Q10,20 6,28 Q18,24 26,32 Q26,18 38,16 Q36,28 46,28 Q40,20 52,18 Q38,8 42,0 Q34,12 26,0Z" fill="#f0a500"/>' +
+        '<path d="M26,6 Q29,16 22,20 Q16,12 4,12 Q14,22 10,28 Q20,25 26,32 Q26,20 36,18 Q35,26 44,26 Q38,18 48,16 Q36,10 40,4 Q33,14 26,6Z" fill="#2e8b4a" opacity="0.85"/>' +
+      '</g>' +
+      /* text */
+      '<text x="62" y="20" font-family="Tahoma,Arial" font-size="11" font-weight="bold" fill="#2e8b4a" text-anchor="middle" direction="rtl">وزارة الموارد البشرية</text>' +
+      '<text x="62" y="36" font-family="Tahoma,Arial" font-size="11" font-weight="bold" fill="#2e8b4a" text-anchor="middle" direction="rtl">والتنمية الاجتماعية</text>' +
+      '<text x="62" y="50" font-family="Tahoma,Arial" font-size="9" fill="#666" text-anchor="middle" direction="rtl">المملكة العربية السعودية</text>' +
+    '</svg>';
 
-        var verifyUrl = window.location.origin + "/verify/" + id;
-        var qrSrc = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=4&data=" +
-                    encodeURIComponent(verifyUrl);
+  /* ── Ajeer logo SVG ── */
+  var ajeerSVG =
+    '<svg class="ajeer-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 60">' +
+      /* أجير text */
+      '<text x="45" y="34" font-family="Tahoma,Arial" font-size="28" font-weight="900" fill="#1b2a4a" text-anchor="middle" direction="rtl">أجير</text>' +
+      /* green underline bar */
+      '<rect x="10" y="38" width="42" height="6" rx="3" fill="#3aaa5c"/>' +
+      /* AJEER text */
+      '<text x="45" y="54" font-family="Arial,sans-serif" font-size="10" font-weight="700" fill="#3aaa5c" text-anchor="middle">AJEER</text>' +
+    '</svg>';
 
-        var permitCode = p.permitCode || "TW" + Math.floor(1000000 + Math.random() * 9000000);
+  fetch("/api/permits/" + id)
+    .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
+    .then(function(p){
 
-        page.innerHTML =
-          /* ════════════ HEADER ════════════ */
-          '<div class="header-container">' +
-            /* QR — LEFT */
-            '<div class="header-left">' +
-              '<img id="qr-img" src="' + qrSrc + '" alt="QR Code" />' +
-              '<div class="code-text">' + permitCode + '</div>' +
-            '</div>' +
+      var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=80x80&margin=2&data=" +
+                  encodeURIComponent(window.location.origin + "/verify/" + id);
 
-            /* Title — CENTER */
-            '<div class="header-center">تصريح أجير - الإعارة</div>' +
+      page.innerHTML =
 
-            /* Logos — RIGHT */
-            '<div class="header-right">' +
-              '<img class="logo-ajeer" src="/ajeer-new-logo-copy.png" alt="Ajeer Logo" />' +
-              '<img class="logo-ministry" src="/Saudi Arabia launches Hajj Ajeer service for Seasonal employment of Hajj - Saudi-Expatriates.com.jpg" alt="Ministry Logo" />' +
-            '</div>' +
+        /* ── TOP HEADER ── */
+        '<div class="top-header">' +
+          '<div class="qr-section">' +
+            '<img id="qr-img" src="' + qrUrl + '" alt="QR"/>' +
+            '<div class="permit-number">' + (p._id ? p._id.toString().slice(-8).toUpperCase() : '') + '</div>' +
           '</div>' +
-
-          /* ════════════ INTRO NOTICE ════════════ */
-          '<div class="notice-text">' +
-            'نشعركم أنه تم التعاقد من قبلنا كجهة مقدمة للخدمة مع الجهة المستفيدة من الخدمة حسب المعلومات المبينة أدناه، ولذلك تم تسجيل معلومات العقد لتكون بحوزة العامل لإثبات عدم مخالفته لنظام العمل ولتقديمها إلى من يهمه الأمر من الجهات المختصة عند طلبها للتحقق من صحة تواجده في مكان تقديم الخدمة' +
+          '<div class="center-title">تصريح أجير - الإعارة</div>' +
+          '<div class="right-logos">' +
+            ajeerSVG +
+            ministrySVG +
           '</div>' +
+        '</div>' +
 
-          /* ════════════ UNIFIED PERMIT TABLE ════════════ */
-          '<table class="permit-table">' +
-            '<tbody>' +
-              /* ── SECTION 1: LABORER INFO ── */
-              '<tr><th colspan="4">بيانات العامل</th></tr>' +
-              '<tr>' +
-                '<td class="lbl-col">اسم العامل</td>' +
-                '<td class="val-col">' + (p.laborerNameEn || '') + '</td>' +
-                '<td class="lbl-col">المهنة</td>' +
-                '<td class="val-col">' + (p.occupationAr || p.occupationEn || '') + '</td>' +
-              '</tr>' +
-              '<tr>' +
-                '<td class="lbl-col">رقم الهوية / الإقامة</td>' +
-                '<td class="val-col">' + (p.idNumber || '') + '</td>' +
-                '<td class="lbl-col">الجنسية</td>' +
-                '<td class="val-col">' + (p.nationalityAr || p.nationalityEn || '') + '</td>' +
-              '</tr>' +
+        /* ── INTRO ── */
+        '<div class="intro-text">' +
+          'نشعركم أنه تم التعاقد من قبلنا كجهة مقدمة للخدمة مع الجهة المستفيدة من الخدمة حسب المعلومات المبينة أدناه، ولذلك تم تسجيل ' +
+          'معلومات العقد لتكون بحوزة العامل لإثبات عدم مخالفته لنظام العمل ولتقديمها إلى من يهمه الأمر من الجهات المختصة عند طلبها ' +
+          'للتحقق من صحة تواجده في مكان تقديم الخدمة' +
+        '</div>' +
 
-              /* ── SECTION 2: PROVIDER INFO ── */
-              '<tr><th colspan="4">بيانات مقدم الخدمة</th></tr>' +
-              '<tr>' +
-                '<td class="lbl-col">المنشأة المقدمة للخدمة</td>' +
-                '<td class="val-col">' + (p.providerNameAr || '') + '</td>' +
-                '<td class="lbl-col">رقم المنشأة في وزارة الموارد البشرية و التنمية الإجتماعية</td>' +
-                '<td class="val-col">' + (p.providerEstablishmentNumber || '') + '</td>' +
-              '</tr>' +
+        /* ── LABORER TABLE ── */
+        '<table class="info">' +
+          '<tr class="section-header"><td colspan="4">بيانات العامل</td></tr>' +
+          '<tr>' +
+            '<td><div class="lbl">اسم العامل</div><div class="val">' + (p.laborerNameEn||'') + '</div></td>' +
+            '<td><div class="lbl">المهنة</div><div class="val">' + (p.occupationEn||'') + '</div></td>' +
+            '<td colspan="2"></td>' +
+          '</tr>' +
+          '<tr>' +
+            '<td><div class="lbl">رقم الهوية / الإقامة</div><div class="val">' + (p.idNumber||'') + '</div></td>' +
+            '<td><div class="lbl">الجنسية</div><div class="val">' + (p.nationalityEn||'') + '</div></td>' +
+            '<td colspan="2"></td>' +
+          '</tr>' +
+        '</table>' +
 
-              /* ── SECTION 3: BENEFICIARY INFO ── */
-              '<tr><th colspan="4">بيانات المستفيد من الخدمة</th></tr>' +
-              '<tr>' +
-                '<td class="lbl-col">المنشأة المستفيدة من الخدمة</td>' +
-                '<td class="val-col">' + (p.beneficiaryNameAr || '') + '</td>' +
-                '<td class="lbl-col">رقم المنشأة في وزارة الموارد البشرية و التنمية الإجتماعية</td>' +
-                '<td class="val-col">' + (p.beneficiaryEstablishmentNumber || '') + '</td>' +
-              '</tr>' +
+        /* ── PROVIDER TABLE ── */
+        '<table class="info">' +
+          '<tr class="section-header"><td colspan="3">بيانات مقدم الخدمة</td></tr>' +
+          '<tr>' +
+            '<td style="width:30%"><div class="lbl">المنشأة المقدمة للخدمة</div><div class="val">' + (p.providerNameEn||'') + (p.providerNameAr ? '<br/>'+p.providerNameAr : '') + '</div></td>' +
+            '<td style="width:40%"><div class="lbl">رقم المنشأة في وزارة الموارد البشرية و التنمية الإجتماعية</div></td>' +
+            '<td style="width:30%"><div class="val">' + (p.providerEstablishmentNumber||'') + '</div></td>' +
+          '</tr>' +
+        '</table>' +
 
-              /* ── SECTION 4: PERMIT DATES ── */
-              '<tr><th colspan="4">بيانات التصريح</th></tr>' +
-              '<tr>' +
-                '<td class="lbl-col">تاريخ بداية التصريح</td>' +
-                '<td class="val-col">' + fmt(p.permitStartDate) + '</td>' +
-                '<td class="lbl-col">تاريخ نهاية التصريح</td>' +
-                '<td class="val-col">' + fmt(p.permitEndDate) + '</td>' +
-              '</tr>' +
-            '</tbody>' +
-          '</table>' +
+        /* ── BENEFICIARY TABLE ── */
+        '<table class="info">' +
+          '<tr class="section-header"><td colspan="3">بيانات المستفيد من الخدمة</td></tr>' +
+          '<tr>' +
+            '<td style="width:30%"><div class="lbl">المنشأة المستفيدة من الخدمة</div><div class="val">' + (p.beneficiaryNameEn||'') + (p.beneficiaryNameAr ? '<br/>'+p.beneficiaryNameAr : '') + '</div></td>' +
+            '<td style="width:40%"><div class="lbl">رقم المنشأة في وزارة الموارد البشرية و التنمية الإجتماعية</div></td>' +
+            '<td style="width:30%"><div class="val">' + (p.beneficiaryEstablishmentNumber||'') + '</div></td>' +
+          '</tr>' +
+        '</table>' +
 
-          /* ════════════ DECLARATIONS ════════════ */
-          '<div class="declarations">' +
-            '<div class="decl-main-title">إقرارات</div>' +
-            '<div class="decl-sub-title">أقر أنا المنشأة المقدمة للخدمة والموضحة بياناتي أعلاه وأتعهد بـ:</div>' +
-            '<ul class="decl-list">' +
-              '<li>إن العامل حامل هذا التصريح بحمله له يقر ويتعهد بأن البيانات المدونة فيه صحيحة على مسؤوليته الشخصية، وأنه يعمل لدى المنشأة ولحسابها، بموجب رخصة إقامة سارية المفعول. وأتحمل أي تبعات قانونية أو غرامات تترتب على خلاف المذكور أعلاه.</li>' +
-              '<li>أنه تم الحصول على موافقة الموظف لإعارة خدماته للمنشأة المستفيدة قبل إصدار التصريح.</li>' +
-              '<li>الالتزام والتقيد بأنظمة العمل والعمال وأي أنظمة و لوائح وقرارات أخرى ذات علاقة.</li>' +
-              '<li>أن الموقع الإلكتروني الخاص بأجير أو القائمين عليه عبارة عن وسيط إلكتروني ما بين الباحثين عن العمل وأصحاب الأعمال فقط وبدون أي التزام قانوني أو غيره على القائمين على موقع أجير.</li>' +
-              '<li>أي تعديل أو كشط في هذا التصريح يجعله لاغياً.</li>' +
-            '</ul>' +
-          '</div>' +
+        /* ── PERMIT DATES TABLE ── */
+        '<table class="info">' +
+          '<tr class="section-header"><td colspan="4">بيانات التصريح</td></tr>' +
+          '<tr>' +
+            '<td><div class="lbl">تاريخ بداية التصريح</div><div class="val">' + fmt(p.permitStartDate) + '</div></td>' +
+            '<td><div class="lbl">تاريخ نهاية التصريح</div><div class="val">' + fmt(p.permitEndDate) + '</div></td>' +
+            '<td colspan="2"></td>' +
+          '</tr>' +
+        '</table>' +
 
-          /* ════════════ FOOTER ════════════ */
-          '<div class="page-footer">' +
-            '<div class="link-text">للتحقق من صحة هذا التصريح وسريان مفعوله بإمكانك زيارة موقع أجير (https://ajeer.com.sa)</div>' +
-            '<div class="approved-text">* خدمة معتمدة من وزارة الموارد البشرية والتنمية الإجتماعية *</div>' +
-          '</div>';
+        /* ── DECLARATIONS ── */
+        '<div class="decl-section">' +
+          '<div class="decl-main-title">إقرارات</div>' +
+          '<div class="decl-sub">أقر أنا المنشأة المقدمة للخدمة والموضحة بياناتي أعلاه وأتعهد بـ:</div>' +
+          '<ul class="decl-list">' +
+            '<li>إن العامل حامل هذا التصريح بحمله له يقر ويتعهد بأن البيانات المدونة فيه صحيحة على مسؤوليته الشخصية، وأنه يعمل لدى المنشأة ولحسابها، بموجب رخصة إقامة سارية المفعول. وأتحمل أي تبعات قانونية أو غرامات تترتب على خلاف المذكور أعلاه.</li>' +
+            '<li>أنه تم الحصول على موافقة الموظف لإعارة خدماته للمنشأة المستفيدة قبل إصدار التصريح.</li>' +
+            '<li>الالتزام والتقيد بأنظمة العمل والعمال وأي أنظمة و لوائح وقرارات أخرى ذات علاقة.</li>' +
+            '<li>أن الموقع الإلكتروني الخاص بأجير أو القائمين عليه عبارة عن وسيط إلكتروني ما بين الباحثين عن العمل وأصحاب الأعمال فقط وبدون أي التزام قانوني أو غيره على القائمين على موقع أجير.</li>' +
+            '<li>أي تعديل أو كشط في هذا التصريح يجعله لاغياً.</li>' +
+          '</ul>' +
+        '</div>' +
 
-        /* Auto-trigger print dialog after QR loads */
-        var qrImg = document.getElementById("qr-img");
-        if (qrImg) {
-          qrImg.onload  = function() { setTimeout(function(){ window.print(); }, 700); };
-          qrImg.onerror = function() { setTimeout(function(){ window.print(); }, 900); };
-        }
-        setTimeout(function(){ window.print(); }, 3000);
-      })
-      .catch(function() {
-        page.innerHTML = '<p style="text-align:center;color:red;padding:60px">Permit not found / التصريح غير موجود</p>';
-      });
-  </script>
+        /* ── FOOTER ── */
+        '<div class="page-footer">' +
+          'للتحقق من صحة هذا التصريح وسريان مفعوله بإمكانك زيارة موقع أجير (https://ajeer.com.sa)<br/>' +
+          '* خدمة معتمدة من وزارة الموارد البشرية والتنمية الإجتماعية *' +
+        '</div>';
+
+      /* Auto print after QR loads */
+      var qImg = document.getElementById("qr-img");
+      qImg.onload  = function(){ setTimeout(function(){ window.print(); }, 700); };
+      qImg.onerror = function(){ setTimeout(function(){ window.print(); }, 900); };
+      setTimeout(function(){ window.print(); }, 2800);
+    })
+    .catch(function(){
+      page.innerHTML = '<p style="text-align:center;color:red;padding:80px;font-size:14px">Permit not found</p>';
+    });
+</script>
 </body>
 </html>
