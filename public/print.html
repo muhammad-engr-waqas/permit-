@@ -421,14 +421,33 @@
         /* Auto-trigger print dialog after QR loads */
         var qrImg = document.getElementById("qr-img");
         if (qrImg) {
-          qrImg.onload  = function() { setTimeout(function(){ printClean(); }, 700); };
-          qrImg.onerror = function() { setTimeout(function(){ printClean(); }, 900); };
+          qrImg.onload  = function() { setTimeout(function(){ printClean(); }, 1200); };
+          qrImg.onerror = function() { setTimeout(function(){ printClean(); }, 1400); };
         }
-        setTimeout(function(){ printClean(); }, 3000);
+        setTimeout(function(){ printClean(); }, 3500);
       })
       .catch(function() {
         page.innerHTML = '<p style="text-align:center;color:red;padding:60px">Permit not found / التصريح غير موجود</p>';
       });
+
+    function printClean() {
+      var content = document.getElementById("permit-page").innerHTML;
+      var styles  = document.querySelector("style").innerHTML;
+      var win = window.open("", "_blank");
+      win.document.write(
+        '<!DOCTYPE html><html lang="ar" dir="rtl"><head>' +
+        '<meta charset="UTF-8"/>' +
+        '<title></title>' +
+        '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">' +
+        '<style>' + styles + '</style>' +
+        '<style>@page{size:A4 portrait;margin:10mm 15mm;} body{padding:15px 25px;margin:0;} .no-print{display:none!important;} .page{box-shadow:none;}</style>' +
+        '</head><body>' +
+        '<div class="page">' + content + '</div>' +
+        '<scr' + 'ipt>setTimeout(function(){window.print();},1800);<\/scr' + 'ipt>' +
+        '</body></html>'
+      );
+      win.document.close();
+    }
   </script>
 </body>
 </html>
