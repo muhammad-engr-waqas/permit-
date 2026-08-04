@@ -2,15 +2,19 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title></title>
+  <title>تصريح أجير - الإعارة</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700;900&display=swap" rel="stylesheet">
+
   <style>
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
+    /* ══════════════════════════════════════════
+       SCREEN & PRINT STYLES
+    ══════════════════════════════════════════ */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
@@ -23,6 +27,7 @@
       font-weight: 400;
     }
 
+    /* ── Toolbar ── */
     .no-print {
       text-align: center;
       margin-bottom: 20px;
@@ -39,6 +44,7 @@
       letter-spacing: 0.5px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.15);
       transition: background 0.2s;
+      font-family: "Noto Sans Arabic", Arial, sans-serif;
     }
     .btn-print:hover { background: #0f1e3d; }
 
@@ -48,14 +54,12 @@
       width: 794px;
       min-height: 1123px;
       margin: 0 auto;
-      padding: 35px 55px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-      position: relative;
+      padding: 15mm 12mm;
       display: flex;
       flex-direction: column;
     }
 
-    /* ── HEADER CONTAINER ── */
+    /* ── HEADER ── */
     .header-container {
       display: flex;
       justify-content: space-between;
@@ -63,13 +67,9 @@
       border: 1px solid #D7D7D7;
       border-radius: 4px;
       padding: 4px 12px;
-      margin-bottom: 55px;
+      margin-bottom: 10px;
       direction: ltr;
-      page-break-inside: avoid;
-      break-inside: avoid;
     }
-
-    /* Left: QR Code + Code */
     .header-left {
       display: flex;
       flex-direction: column;
@@ -91,8 +91,6 @@
       letter-spacing: 0.5px;
       color: #222;
     }
-
-    /* Center: Title */
     .header-center {
       display: flex;
       align-items: center;
@@ -105,8 +103,6 @@
       padding: 0 10px;
       direction: rtl;
     }
-
-    /* Right: Logos */
     .header-right {
       display: flex;
       align-items: center;
@@ -115,39 +111,28 @@
       flex-shrink: 0;
       direction: ltr;
     }
-    .logo-ajeer {
-      height: 48px;
-      width: auto;
-      object-fit: contain;
-    }
-    .logo-ministry {
-      height: 48px;
-      width: auto;
-      object-fit: contain;
-    }
+    .logo-ajeer   { height: 48px; width: auto; object-fit: contain; }
+    .logo-ministry { height: 48px; width: auto; object-fit: contain; }
 
-    /* ── NOTICE INTRO TEXT ── */
+    /* ── NOTICE TEXT ── */
     .notice-text {
-      font-size: 12px;
+      font-size: 13px;
       line-height: 1.85;
-      font-weight: 400;
       text-align: justify;
-      margin-bottom: 20px;
+      text-align-last: right;
+      margin-bottom: 14px;
+      margin-top: 20px;
       color: #222;
       direction: rtl;
-      page-break-inside: avoid;
-      break-inside: avoid;
     }
 
     /* ── TABLES ── */
     table.permit-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 0px;
+      margin-bottom: 0;
       font-size: 12px;
       direction: rtl;
-      page-break-inside: avoid;
-      break-inside: avoid;
     }
     table.permit-table th {
       background: #F2F5F5;
@@ -155,76 +140,62 @@
       text-align: center;
       font-weight: 600;
       font-size: 12px;
-      padding: 4px 12px;
+      padding: 6px 12px;
       color: #000;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
     table.permit-table td {
       border: 1px solid #D7D7D7;
-      padding: 3px 8px;
+      padding: 5px 10px;
       vertical-align: top;
-      white-space: normal;
       word-wrap: break-word;
       overflow-wrap: break-word;
-      height: auto;
-      font-weight: 400;
     }
-
     .lbl-col {
       width: 25%;
       background: #F2F5F5;
-      font-weight: 400;
       color: #222;
-      font-size: 12px;
+      font-size: 11.5px;
       text-align: right;
-      line-height: 1.4;
-      font-family: "Noto Sans Arabic", "Frutiger LT Arabic", Tahoma, Arial, sans-serif;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
     .val-col {
       width: 25%;
       background: #fff;
-      font-weight: 400;
       color: #111;
-      font-size: 12px;
-      direction: rtl;
+      font-size: 11.5px;
       text-align: right;
-      line-height: 1.4;
-      font-family: "Noto Sans Arabic", "Frutiger LT Arabic", Tahoma, Arial, sans-serif;
     }
 
     /* ── DECLARATIONS ── */
-    .declarations {
-      margin-top: 2px;
-      direction: rtl;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
+    .declarations { margin-top: 0; direction: rtl; }
     .decl-main-title {
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 600;
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       color: #000;
     }
     .decl-sub-title {
       font-size: 12px;
       font-weight: 600;
-      margin-bottom: 10px;
-      color: #000;
+      margin-bottom: 8px;
+      color: #222;
     }
     .decl-list {
       list-style: none;
       padding-right: 0;
-      line-height: 1.5;
-      font-size: 12px;
-      font-weight: 400;
+      line-height: 1.9;
+      font-size: 11.5px;
       color: #222;
     }
     .decl-list li {
-      margin-bottom: 0px;
+      margin-bottom: 4px;
       position: relative;
       padding-right: 16px;
       text-align: justify;
-      font-weight: 400;
     }
     .decl-list li::before {
       content: "•";
@@ -239,25 +210,23 @@
     .page-footer {
       margin-top: auto;
       text-align: center;
-      font-size: 12px;
-      font-weight: 400;
+      font-size: 11px;
       color: #444;
       direction: rtl;
       line-height: 1.8;
-      padding-top: 25px;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .page-footer .link-text {
-      color: #333;
-      font-weight: 400;
-    }
-    .page-footer .approved-text {
-      font-weight: 400;
-      margin-top: 3px;
+      padding-top: 20px;
     }
 
-    /* ── PRINT MEDIA SPECIFICATIONS ── */
+    /* ══════════════════════════════════════════
+       PRINT SPECIFIC STYLES
+       (Hides headers/footers using margin: 0)
+    ══════════════════════════════════════════ */
+    @page {
+      size: A4 portrait;
+      /* SETTING MARGIN TO 0 HIDES THE BROWSER URL AND DATE/TIME */
+      margin: 0;
+    }
+
     @media print {
       body {
         background: #fff;
@@ -270,41 +239,31 @@
       .page {
         box-shadow: none;
         width: 100%;
+        min-height: unset;
+        /* Padding applies inside the page since the physical margin is 0 */
+        padding: 15mm 12mm;
         margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-      @page { 
-        size: A4 portrait; 
-        margin: 15mm 22mm;
-        /* Hide browser header/footer (date, title, URL) */
-        margin-top: 10mm;
-        margin-bottom: 10mm;
-      }
-      /* Remove browser default header and footer */
-      @page :first { margin-top: 10mm; }
-      th, td, .lbl-col {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
       }
     }
   </style>
 </head>
 <body>
 
+  <!-- ── TOOLBAR ── -->
   <div class="no-print">
-    <button class="btn-print" onclick="printClean()">🖨️ Save as PDF / طباعة</button>
+    <button class="btn-print" onclick="window.print()">
+      🖨️ Print / Save as PDF
+    </button>
   </div>
 
+  <!-- ── PERMIT CONTENT ── -->
   <div class="page" id="permit-page">
     <p style="text-align:center;color:#888;padding:60px 0;">جاري التحميل... Loading...</p>
   </div>
 
   <script>
-    var id   = window.location.pathname.split("/").pop();
-    var page = document.getElementById("permit-page");
+    var permitId = window.location.pathname.split("/").pop();
+    var page     = document.getElementById("permit-page");
 
     function fmt(d) {
       if (!d) return "";
@@ -314,92 +273,80 @@
         String(dt.getDate()).padStart(2, "0");
     }
 
-    fetch("/api/permits/" + id)
+    fetch("/api/permits/" + permitId)
       .then(function(r) {
         if (!r.ok) throw new Error("Not found");
         return r.json();
       })
       .then(function(p) {
 
-        var verifyUrl = window.location.origin + "/verify/" + id;
-        var qrSrc = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=4&data=" +
-                    encodeURIComponent(verifyUrl);
-
-        var permitCode = p.permitCode || "TW" + Math.floor(1000000 + Math.random() * 9000000);
+        var verifyUrl   = window.location.origin + "/verify/" + permitId;
+        var qrSrc       = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=4&data=" + encodeURIComponent(verifyUrl);
+        var permitCode  = p.permitCode || "";
 
         page.innerHTML =
-          /* ════════════ HEADER ════════════ */
+          /* ════ HEADER ════ */
           '<div class="header-container">' +
-            /* QR — LEFT */
             '<div class="header-left">' +
-              '<img id="qr-img" src="' + qrSrc + '" alt="QR Code" />' +
+              '<img id="qr-img" src="' + qrSrc + '" alt="QR Code"/>' +
               '<div class="code-text">' + permitCode + '</div>' +
             '</div>' +
-
-            /* Title — CENTER */
             '<div class="header-center">تصريح أجير - الإعارة</div>' +
-
-            /* Logos — RIGHT */
             '<div class="header-right">' +
-              '<img class="logo-ajeer" src="/ajeer-new-logo-copy.png" alt="Ajeer Logo" />' +
-              '<img class="logo-ministry" src="/Saudi Arabia launches Hajj Ajeer service for Seasonal employment of Hajj - Saudi-Expatriates.com.jpg" alt="Ministry Logo" />' +
+              '<img class="logo-ajeer" src="/ajeer-new-logo-copy.png" alt="Ajeer Logo"/>' +
+              '<img class="logo-ministry" src="/Saudi Arabia launches Hajj Ajeer service for Seasonal employment of Hajj - Saudi-Expatriates.com.jpg" alt="Ministry Logo"/>' +
             '</div>' +
           '</div>' +
 
-          /* ════════════ INTRO NOTICE ════════════ */
+          /* ════ NOTICE ════ */
           '<div class="notice-text">' +
-            'نشعركم أنه تم التعاقد من قبلنا كجهة مقدمة للخدمة مع الجهة المستفيدة من الخدمة حسب المعلومات المبينة أدناه، ولذلك تم تسجيل معلومات العقد لتكون بحوزة العامل لإثبات عدم مخالفته لنظام العمل ولتقديمها إلى من يهمه الأمر من الجهات المختصة عند طلبها<br/>' +
+            'نشعركم أنه تم التعاقد من قبلنا كجهة مقدمة للخدمة مع الجهة المستفيدة من الخدمة حسب المعلومات المبينة أدناه، ولذلك تم تسجيل<br/>' +
+            'معلومات العقد لتكون بحوزة العامل لإثبات عدم مخالفته لنظام العمل ولتقديمها إلى من يهمه الأمر من الجهات المختصة عند طلبها<br/>' +
             'للتحقق من صحة تواجده في مكان تقديم الخدمة' +
           '</div>' +
 
-          /* ════════════ UNIFIED PERMIT TABLE ════════════ */
-          '<table class="permit-table">' +
-            '<tbody>' +
-              /* ── SECTION 1: LABORER INFO ── */
-              '<tr><th colspan="4">بيانات العامل</th></tr>' +
-              '<tr>' +
-                '<td class="lbl-col">اسم العامل</td>' +
-                '<td class="val-col">' + (p.laborerNameEn || '') + '</td>' +
-                '<td class="lbl-col">المهنة</td>' +
-                '<td class="val-col">' + (p.occupationAr || p.occupationEn || '') + '</td>' +
-              '</tr>' +
-              '<tr>' +
-                '<td class="lbl-col">رقم الهوية / الإقامة</td>' +
-                '<td class="val-col">' + (p.idNumber || '') + '</td>' +
-                '<td class="lbl-col">الجنسية</td>' +
-                '<td class="val-col">' + (p.nationalityAr || p.nationalityEn || '') + '</td>' +
-              '</tr>' +
+          /* ════ TABLE ════ */
+          '<table class="permit-table"><tbody>' +
+            '<tr><th colspan="4">بيانات العامل</th></tr>' +
+            '<tr>' +
+              '<td class="lbl-col">اسم العامل</td>' +
+              '<td class="val-col">' + (p.laborerNameEn || '') + '</td>' +
+              '<td class="lbl-col">المهنة</td>' +
+              '<td class="val-col">' + (p.occupationAr || p.occupationEn || '') + '</td>' +
+            '</tr>' +
+            '<tr>' +
+              '<td class="lbl-col">رقم الهوية / الإقامة</td>' +
+              '<td class="val-col">' + (p.idNumber || '') + '</td>' +
+              '<td class="lbl-col">الجنسية</td>' +
+              '<td class="val-col">' + (p.nationalityAr || p.nationalityEn || '') + '</td>' +
+            '</tr>' +
 
-              /* ── SECTION 2: PROVIDER INFO ── */
-              '<tr><th colspan="4">بيانات مقدم الخدمة</th></tr>' +
-              '<tr>' +
-                '<td class="lbl-col">المنشأة المقدمة للخدمة</td>' +
-                '<td class="val-col">' + (p.providerNameAr || '') + '</td>' +
-                '<td class="lbl-col">رقم المنشأة في وزارة الموارد البشرية و التنمية الإجتماعية</td>' +
-                '<td class="val-col">' + (p.providerEstablishmentNumber || '') + '</td>' +
-              '</tr>' +
+            '<tr><th colspan="4">بيانات مقدم الخدمة</th></tr>' +
+            '<tr>' +
+              '<td class="lbl-col">المنشأة المقدمة للخدمة</td>' +
+              '<td class="val-col">' + (p.providerNameAr || '') + '</td>' +
+              '<td class="lbl-col">رقم المنشأة في وزارة الموارد البشرية و التنمية الإجتماعية</td>' +
+              '<td class="val-col">' + (p.providerEstablishmentNumber || '') + '</td>' +
+            '</tr>' +
 
-              /* ── SECTION 3: BENEFICIARY INFO ── */
-              '<tr><th colspan="4">بيانات المستفيد من الخدمة</th></tr>' +
-              '<tr>' +
-                '<td class="lbl-col">المنشأة المستفيدة من الخدمة</td>' +
-                '<td class="val-col">' + (p.beneficiaryNameAr || '') + '</td>' +
-                '<td class="lbl-col">رقم المنشأة في وزارة الموارد البشرية و التنمية الإجتماعية</td>' +
-                '<td class="val-col">' + (p.beneficiaryEstablishmentNumber || '') + '</td>' +
-              '</tr>' +
+            '<tr><th colspan="4">بيانات المستفيد من الخدمة</th></tr>' +
+            '<tr>' +
+              '<td class="lbl-col">المنشأة المستفيدة من الخدمة</td>' +
+              '<td class="val-col">' + (p.beneficiaryNameAr || '') + '</td>' +
+              '<td class="lbl-col">رقم المنشأة في وزارة الموارد البشرية و التنمية الإجتماعية</td>' +
+              '<td class="val-col">' + (p.beneficiaryEstablishmentNumber || '') + '</td>' +
+            '</tr>' +
 
-              /* ── SECTION 4: PERMIT DATES ── */
-              '<tr><th colspan="4">بيانات التصريح</th></tr>' +
-              '<tr>' +
-                '<td class="lbl-col">تاريخ بداية التصريح</td>' +
-                '<td class="val-col">' + fmt(p.permitStartDate) + '</td>' +
-                '<td class="lbl-col">تاريخ نهاية التصريح</td>' +
-                '<td class="val-col">' + fmt(p.permitEndDate) + '</td>' +
-              '</tr>' +
-            '</tbody>' +
-          '</table>' +
+            '<tr><th colspan="4">بيانات التصريح</th></tr>' +
+            '<tr>' +
+              '<td class="lbl-col">تاريخ بداية التصريح</td>' +
+              '<td class="val-col">' + fmt(p.permitStartDate) + '</td>' +
+              '<td class="lbl-col">تاريخ نهاية التصريح</td>' +
+              '<td class="val-col">' + fmt(p.permitEndDate) + '</td>' +
+            '</tr>' +
+          '</tbody></table>' +
 
-          /* ════════════ DECLARATIONS ════════════ */
+          /* ════ DECLARATIONS ════ */
           '<div class="declarations">' +
             '<div class="decl-main-title">إقرارات</div>' +
             '<div class="decl-sub-title">أقر أنا المنشأة المقدمة للخدمة والموضحة بياناتي أعلاه وأتعهد بـ:</div>' +
@@ -412,42 +359,21 @@
             '</ul>' +
           '</div>' +
 
-          /* ════════════ FOOTER ════════════ */
+          /* ════ FOOTER ════ */
           '<div class="page-footer">' +
-            '<div class="link-text">للتحقق من صحة هذا التصريح وسريان مفعوله بإمكانك زيارة موقع أجير (https://ajeer.com.sa)</div>' +
-            '<div class="approved-text">* خدمة معتمدة من وزارة الموارد البشرية والتنمية الإجتماعية *</div>' +
+            '<div>للتحقق من صحة هذا التصريح وسريان مفعوله بإمكانك زيارة موقع أجير (https://ajeer.com.sa)</div>' +
+            '<div>* خدمة معتمدة من وزارة الموارد البشرية والتنمية الإجتماعية *</div>' +
           '</div>';
 
-        /* Auto-trigger print dialog after QR loads */
-        var qrImg = document.getElementById("qr-img");
-        if (qrImg) {
-          qrImg.onload  = function() { setTimeout(function(){ printClean(); }, 1200); };
-          qrImg.onerror = function() { setTimeout(function(){ printClean(); }, 1400); };
-        }
-        setTimeout(function(){ printClean(); }, 3500);
+        /* Optional: Auto-print on load */
+        setTimeout(function() {
+          window.print();
+        }, 1500);
+
       })
       .catch(function() {
         page.innerHTML = '<p style="text-align:center;color:red;padding:60px">Permit not found / التصريح غير موجود</p>';
       });
-
-    function printClean() {
-      var content = document.getElementById("permit-page").innerHTML;
-      var styles  = document.querySelector("style").innerHTML;
-      var win = window.open("", "_blank");
-      win.document.write(
-        '<!DOCTYPE html><html lang="ar" dir="rtl"><head>' +
-        '<meta charset="UTF-8"/>' +
-        '<title></title>' +
-        '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">' +
-        '<style>' + styles + '</style>' +
-        '<style>@page{size:A4 portrait;margin:10mm 15mm;} body{padding:15px 25px;margin:0;} .no-print{display:none!important;} .page{box-shadow:none;}</style>' +
-        '</head><body>' +
-        '<div class="page">' + content + '</div>' +
-        '<scr' + 'ipt>setTimeout(function(){window.print();},1800);<\/scr' + 'ipt>' +
-        '</body></html>'
-      );
-      win.document.close();
-    }
   </script>
 </body>
 </html>
