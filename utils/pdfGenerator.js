@@ -1,6 +1,6 @@
-// PDF is now generated client-side via browser print dialog (print.html)
-// This file is kept for compatibility but not used in production.
+// PDF is now generated client-side via html2pdf.js in print.html
+// Puppeteer is NOT required.
 async function generatePermitPdf() {
-  throw new Error("Use client-side print page instead: /print/:id");
+  throw new Error("Use client-side html2pdf.js in /print/:id instead.");
 }
 module.exports = { generatePermitPdf };

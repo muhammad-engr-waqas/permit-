@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // API
 app.use("/api/permits", permitRoutes);
 
-// Print page — renders full permit HTML, auto-triggers browser print dialog
+// Print page — serves print.html which uses html2pdf.js client-side (no browser headers)
 app.get("/print/:id", async (req, res) => {
   try {
     const permit = await Permit.findById(req.params.id).lean();
@@ -30,9 +30,7 @@ app.get("/print/:id", async (req, res) => {
   }
 });
 
-// The page that opens when the QR code is scanned.
-// It shows the permit's own static HTML (server-rendered) so it works
-// even without JavaScript on the visitor's phone.
+// Verify page — opened when QR code is scanned
 app.get("/verify/:id", async (req, res) => {
   try {
     const permit = await Permit.findById(req.params.id).lean();

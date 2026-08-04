@@ -23,7 +23,17 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
 <meta charset="UTF-8" />
 <title>تصريح أجير - الإعارة - ${permit._id}</title>
 <style>
-  @page { size: A4 portrait; margin: 0; }
+  @page {
+    size: A4 portrait;
+    margin: 15mm 22mm;
+    /* Hide browser print headers (URL, date/time) */
+    @top-left { content: none; display: none; }
+    @top-center { content: none; display: none; }
+    @top-right { content: none; display: none; }
+    @bottom-left { content: none; display: none; }
+    @bottom-center { content: none; display: none; }
+    @bottom-right { content: none; display: none; }
+  }
   * {
     box-sizing: border-box;
     margin: 0;
@@ -32,17 +42,17 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
     print-color-adjust: exact !important;
   }
   body {
-    /* FIX 3: Tahoma/Arial supports both Arabic & Latin glyphs with consistent visual weight */
-    font-family: Tahoma, Arial, "Segoe UI", sans-serif;
+    font-family: "Frutiger", "Frutiger LT Arabic", "Frutiger Next Arabic", Arial, Tahoma, "Segoe UI", sans-serif;
     background: #fff;
-    color: #000;
-    font-size: 10.5px;
-    line-height: 1.4;
+    color: #111;
+    font-size: 12px;
+    line-height: 1.5;
+    font-weight: 400;
   }
   .page {
-    width: 88%;
-    margin: 0 auto;
-    padding: 40px 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
     min-height: 297mm;
     display: flex;
     flex-direction: column;
@@ -54,29 +64,33 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
     justify-content: space-between;
     align-items: center;
     border: 1px solid #D7D7D7;
-    padding: 8px 14px;
-    margin-bottom: 15px;
+    border-radius: 4px;
+    padding: 4px 12px;
+    margin-bottom: 14px;
     direction: ltr;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
   .header-left {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100px;
+    width: 90px;
     flex-shrink: 0;
   }
   .header-left img {
-    width: 70px;
-    height: 70px;
+    width: 52px;
+    height: 52px;
     display: block;
+    object-fit: contain;
   }
   .header-left .code-text {
     font-size: 10px;
-    font-weight: 700;
-    margin-top: 4px;
+    font-weight: 400;
+    margin-top: 2px;
     letter-spacing: 0.5px;
-    color: #1a1a1a;
+    color: #222;
   }
 
   .header-center {
@@ -84,11 +98,11 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
     align-items: center;
     justify-content: center;
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 600;
     color: #000;
     text-align: center;
     flex-grow: 1;
-    padding: 0 15px;
+    padding: 0 10px;
     direction: rtl;
   }
 
@@ -96,133 +110,145 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
     flex-shrink: 0;
     direction: ltr;
   }
   .logo-ajeer {
-    height: 36px;
+    height: 48px;
     width: auto;
+    object-fit: contain;
   }
   .logo-ministry {
-    height: 40px;
+    height: 48px;
     width: auto;
+    object-fit: contain;
   }
 
   /* ── NOTICE TEXT ── */
   .notice-text {
-    font-size: 11px;
-    line-height: 1.95;
+    font-size: 12px;
+    line-height: 1.85;
+    font-weight: 400;
     text-align: justify;
-    margin-bottom: 15px;
-    color: #111;
+    margin-bottom: 20px;
+    color: #222;
     direction: rtl;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
   /* ── TABLES ── */
   table.permit-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 10px;
-    font-size: 10.5px;
+    margin-bottom: 20px;
+    font-size: 12px;
     direction: rtl;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
   table.permit-table th {
-    background: #ECF0F0;
+    background: #F2F5F5;
     border: 1px solid #D7D7D7;
     text-align: center;
-    font-weight: 700;
-    font-size: 12px;
-    padding: 6px 10px;
-    color: #000000;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 12px;
+    color: #111;
   }
   table.permit-table td {
     border: 1px solid #D7D7D7;
-    padding: 6px 10px;
-    /* FIX 2: auto height — cell expands with content, no fixed height */
+    padding: 7px 12px;
     vertical-align: middle;
     white-space: normal;
     word-wrap: break-word;
     overflow-wrap: break-word;
     height: auto;
+    font-weight: 400;
   }
   .lbl-col {
     width: 25%;
-    background: #ECF0F0;
-    font-weight: normal;
-    color: #000000;
-    font-size: 10.5px;
+    background: #F2F5F5;
+    font-weight: 400;
+    color: #222;
+    font-size: 11.5px;
     text-align: right;
-    line-height: 1.35;
-    /* FIX 3: same font stack as body */
-    font-family: Tahoma, Arial, "Segoe UI", sans-serif;
+    line-height: 1.4;
+    font-family: "Frutiger", "Frutiger LT Arabic", "Frutiger Next Arabic", Arial, Tahoma, "Segoe UI", sans-serif;
   }
   .val-col {
     width: 25%;
     background: #fff;
-    font-weight: normal;
-    color: #000000;
-    font-size: 10.5px;
-    /* FIX 1: Always RTL + right-aligned so English names stay consistent with Arabic RTL table */
+    font-weight: 400;
+    color: #111;
+    font-size: 11.5px;
     direction: rtl;
     text-align: right;
-    line-height: 1.35;
-    /* FIX 3: same font stack handles both Arabic & Latin glyphs */
-    font-family: Tahoma, Arial, "Segoe UI", sans-serif;
+    line-height: 1.4;
+    font-family: "Frutiger", "Frutiger LT Arabic", "Frutiger Next Arabic", Arial, Tahoma, "Segoe UI", sans-serif;
   }
 
   /* ── DECLARATIONS ── */
   .declarations {
-    margin-top: 15px;
+    margin-top: 10px;
     direction: rtl;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
   .decl-main-title {
-    font-size: 12.5px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 600;
     text-align: center;
     margin-bottom: 12px;
     color: #000;
   }
   .decl-sub-title {
-    font-size: 10.5px;
-    font-weight: bold;
-    margin-bottom: 8px;
-    color: #1a1a1a;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #222;
   }
   .decl-list {
     list-style: none;
     padding-right: 0;
-    line-height: 2.05;
-    font-size: 10.5px;
-    color: #111;
+    line-height: 1.95;
+    font-size: 11.5px;
+    font-weight: 400;
+    color: #222;
   }
   .decl-list li {
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     position: relative;
-    padding-right: 14px;
+    padding-right: 16px;
     text-align: justify;
+    font-weight: 400;
   }
   .decl-list li::before {
     content: "•";
     position: absolute;
     right: 0;
     top: 0;
-    font-size: 13px;
+    font-size: 15px;
+    color: #444;
   }
 
   /* ── FOOTER ── */
   .page-footer {
     margin-top: auto;
     text-align: center;
-    font-size: 10px;
-    color: #333;
+    font-size: 11px;
+    font-weight: 400;
+    color: #444;
     direction: rtl;
-    line-height: 1.85;
-    padding-top: 20px;
+    line-height: 1.8;
+    padding-top: 25px;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
   .page-footer .approved-text {
-    font-weight: normal;
-    margin-top: 2px;
+    font-weight: 400;
+    margin-top: 3px;
   }
 </style>
 </head>
