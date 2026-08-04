@@ -295,10 +295,7 @@
 <body>
 
   <div class="no-print">
-    <button class="btn-print" onclick="window.print()">🖨️ Save as PDF / طباعة</button>
-    <p style="margin-top:8px;font-size:12px;color:#666;">
-      ⚠️ Print dialog mein: <b>More settings → Headers and footers → Uncheck</b>
-    </p>
+    <button class="btn-print" onclick="printClean()">🖨️ Save as PDF / طباعة</button>
   </div>
 
   <div class="page" id="permit-page">
@@ -424,10 +421,10 @@
         /* Auto-trigger print dialog after QR loads */
         var qrImg = document.getElementById("qr-img");
         if (qrImg) {
-          qrImg.onload  = function() { setTimeout(function(){ window.print(); }, 700); };
-          qrImg.onerror = function() { setTimeout(function(){ window.print(); }, 900); };
+          qrImg.onload  = function() { setTimeout(function(){ printClean(); }, 700); };
+          qrImg.onerror = function() { setTimeout(function(){ printClean(); }, 900); };
         }
-        setTimeout(function(){ window.print(); }, 3000);
+        setTimeout(function(){ printClean(); }, 3000);
       })
       .catch(function() {
         page.innerHTML = '<p style="text-align:center;color:red;padding:60px">Permit not found / التصريح غير موجود</p>';
