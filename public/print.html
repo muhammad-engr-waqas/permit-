@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>تصريح أجير - الإعارة</title>
+  <title></title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -63,8 +63,8 @@
       border: 1px solid #D7D7D7;
       border-radius: 4px;
       padding: 4px 12px;
-      margin-bottom: 14px;
-      direction: ltr; /* Keeps QR left, title middle, logos right */
+      margin-bottom: 55px;
+      direction: ltr;
       page-break-inside: avoid;
       break-inside: avoid;
     }
@@ -143,7 +143,7 @@
     table.permit-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 20px;
+      margin-bottom: 0px;
       font-size: 12px;
       direction: rtl;
       page-break-inside: avoid;
@@ -156,12 +156,12 @@
       font-weight: 600;
       font-size: 12px;
       padding: 4px 12px;
-      color: #111;
+      color: #000;
     }
     table.permit-table td {
       border: 1px solid #D7D7D7;
       padding: 3px 8px;
-      vertical-align: middle;
+      vertical-align: top;
       white-space: normal;
       word-wrap: break-word;
       overflow-wrap: break-word;
@@ -193,34 +193,34 @@
 
     /* ── DECLARATIONS ── */
     .declarations {
-      margin-top: 10px;
+      margin-top: 2px;
       direction: rtl;
       page-break-inside: avoid;
       break-inside: avoid;
     }
     .decl-main-title {
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 600;
       text-align: center;
       margin-bottom: 12px;
       color: #000;
     }
     .decl-sub-title {
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 600;
       margin-bottom: 10px;
-      color: #222;
+      color: #000;
     }
     .decl-list {
       list-style: none;
       padding-right: 0;
-      line-height: 1.95;
+      line-height: 1.5;
       font-size: 12px;
       font-weight: 400;
       color: #222;
     }
     .decl-list li {
-      margin-bottom: 6px;
+      margin-bottom: 0px;
       position: relative;
       padding-right: 16px;
       text-align: justify;
@@ -278,8 +278,13 @@
       }
       @page { 
         size: A4 portrait; 
-        margin: 15mm 22mm; 
+        margin: 15mm 22mm;
+        /* Hide browser header/footer (date, title, URL) */
+        margin-top: 10mm;
+        margin-bottom: 10mm;
       }
+      /* Remove browser default header and footer */
+      @page :first { margin-top: 10mm; }
       th, td, .lbl-col {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
@@ -291,6 +296,9 @@
 
   <div class="no-print">
     <button class="btn-print" onclick="window.print()">🖨️ Save as PDF / طباعة</button>
+    <p style="margin-top:8px;font-size:12px;color:#666;">
+      ⚠️ Print dialog mein: <b>More settings → Headers and footers → Uncheck</b>
+    </p>
   </div>
 
   <div class="page" id="permit-page">
