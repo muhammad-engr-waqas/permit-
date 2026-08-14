@@ -40,7 +40,7 @@ class UBLPaymentGateway extends PaymentGateway {
     this.terminalId = process.env.UBL_TERMINAL_ID;
     this.returnUrl = process.env.UBL_RETURN_URL;
     this.callbackUrl = process.env.UBL_CALLBACK_URL;
-    this.environment = process.env.UBL_ENVIRONMENT || "sandbox";
+    this.environment = (process.env.UBL_ENVIRONMENT || process.env.PAYMENT_ENVIRONMENT || "sandbox").toLowerCase().trim();
     this.gatewayUrl = process.env.UBL_GATEWAY_URL || "";
   }
 

@@ -313,7 +313,8 @@ router.get("/ubl/return", async (req, res) => {
  * SANDBOX ONLY — simulates UBL gateway completing payment.
  */
 router.get("/ubl/sandbox-redirect", async (req, res) => {
-  if (process.env.UBL_ENVIRONMENT !== "sandbox") {
+  const env = (process.env.UBL_ENVIRONMENT || process.env.PAYMENT_ENVIRONMENT || "sandbox").toLowerCase().trim();
+  if (env === "production" && process.env.UBL_GATEWAY_URL) {
     return res.status(403).json({ error: "Sandbox redirect is only available in sandbox mode" });
   }
 
