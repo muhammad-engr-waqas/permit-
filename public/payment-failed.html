@@ -8,12 +8,11 @@
 </head>
 <body>
   <div class="wrapper">
-    <div class="payment-icon">✕</div>
     <h1>لم يتم إتمام الدفع</h1>
     <p class="sub" style="text-align:center;">Payment was not completed — your data has been saved</p>
 
     <div class="alert alert-error" id="failReason">
-      عملية الدفع لم تكتمل أو تم إلغاؤها. — Payment was not completed or was cancelled.
+      عملية الدفع لم تكتمل أو تم إلغاؤها / Payment was not completed or was cancelled
     </div>
 
     <div id="orderDetails" style="display:none; margin-bottom:16px;">
@@ -32,7 +31,7 @@
     </div>
 
     <p style="font-size:13px; color:#4b5563; text-align:center; margin-bottom:16px;">
-      💾 بياناتك محفوظة — Your information has been preserved. You do not need to re-enter details.
+      بياناتك محفوظة — Your information has been preserved. You do not need to re-enter details.
     </p>
 
     <button class="btn-main" id="btnRetry">
@@ -40,7 +39,7 @@
     </button>
 
     <button class="btn-secondary" onclick="window.location.href='/'">
-      ← إنشاء طلب جديد / New Order
+      إنشاء طلب جديد / New Order
     </button>
   </div>
 
@@ -54,8 +53,9 @@
         missing_order: "Order ID missing — please go back.",
         order_not_found: "Order not found.",
         server_error: "A server error occurred. Please try again.",
+        cancelled: "تم إلغاء عملية الدفع من قبل المستخدم / Payment was cancelled by user.",
       };
-      document.getElementById("failReason").textContent = "⚠ " + (reasonMap[errMsg] || errMsg);
+      document.getElementById("failReason").textContent = reasonMap[errMsg] || errMsg;
     }
 
     if (orderId) {

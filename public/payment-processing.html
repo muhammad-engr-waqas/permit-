@@ -8,9 +8,8 @@
 </head>
 <body>
   <div class="wrapper">
-    <div class="payment-icon">⏳</div>
-    <h1>جاري إعداد الدفع</h1>
-    <p class="sub" style="text-align:center;">Payment Processing / Redirecting to Secure Gateway</p>
+    <h1>معالجة عملية الدفع</h1>
+    <p class="sub" style="text-align:center;">Payment Processing — Redirecting to Payment Gateway</p>
 
     <div id="orderInfo">
       <div class="order-info-row">
@@ -26,15 +25,15 @@
         <span class="order-info-value" id="infoAmount">—</span>
       </div>
       <div class="order-info-row">
-        <span class="order-info-label">بوابة الدفع / Payment Gateway</span>
-        <span class="order-info-value">UBL Secure Payment</span>
+        <span class="order-info-label">بوابة الدفع / Gateway</span>
+        <span class="order-info-value">UBL E-Commerce IPG</span>
       </div>
     </div>
 
-    <div style="margin-top:20px;">
+    <div style="margin-top:24px;">
       <div class="spinner" id="spinner"></div>
       <p id="statusMsg" style="text-align:center; font-size:13.5px; color:#4b5563;">
-        جاري إنشاء جلسة الدفع الآمنة... / Creating secure payment session...
+        جاري تهيئة جلسة الدفع الآمنة... / Initializing payment session...
       </p>
     </div>
 
@@ -45,7 +44,7 @@
     </button>
 
     <button class="btn-secondary" onclick="window.location.href='/'">
-      ← العودة للنموذج / Go Back to Form
+      العودة للنموذج / Back to Form
     </button>
   </div>
 
@@ -81,7 +80,7 @@
       document.getElementById("errorBox").style.display = "none";
       document.getElementById("spinner").style.display = "block";
       document.getElementById("statusMsg").textContent =
-        "جاري إنشاء جلسة الدفع... / Creating payment session...";
+        "جاري إعداد جلسة الدفع... / Creating payment session...";
 
       try {
         const res = await fetch("/api/payments/create", {
@@ -101,11 +100,11 @@
         }
 
         document.getElementById("statusMsg").textContent =
-          "✓ جاري التوجيه إلى بوابة الدفع الآمنة... / Redirecting to secure gateway...";
+          "جاري التوجيه إلى بوابة الدفع... / Redirecting to secure gateway...";
 
         setTimeout(() => {
           window.location.href = data.paymentUrl;
-        }, 800);
+        }, 600);
 
       } catch (err) {
         showError(err.message);
@@ -116,7 +115,7 @@
       document.getElementById("spinner").style.display = "none";
       document.getElementById("statusMsg").textContent = "";
       const box = document.getElementById("errorBox");
-      box.textContent = "⚠ " + msg;
+      box.textContent = msg;
       box.style.display = "block";
       document.getElementById("btnRetry").style.display = "block";
     }

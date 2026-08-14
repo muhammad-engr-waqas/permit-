@@ -8,9 +8,8 @@
 </head>
 <body>
   <div class="wrapper">
-    <div class="payment-icon" id="headerIcon">⏳</div>
-    <h1 id="headerTitle">جاري التحقق من الدفع</h1>
-    <p class="sub" id="headerSub" style="text-align:center;">Verifying payment — please wait...</p>
+    <h1 id="headerTitle">تم الدفع بنجاح</h1>
+    <p class="sub" id="headerSub" style="text-align:center;">Payment Successful — Permits are Ready for Download</p>
 
     <!-- State: Verifying -->
     <div id="stateVerifying">
@@ -23,7 +22,7 @@
     <!-- State: Success -->
     <div id="stateSuccess" style="display:none;">
       <div class="badge-valid" id="successAlert">
-        ✓ تم التحقق من الدفع بنجاح — Payment Verified
+        تم تأكيد الدفع بنجاح / Payment Verified Successfully
       </div>
 
       <div id="orderSummarySuccess" style="margin-bottom:18px;">
@@ -68,14 +67,14 @@
     <!-- State: Failed/Cancelled -->
     <div id="stateFailed" style="display:none;">
       <div class="alert alert-error" id="failedAlert">
-        لم يتم الدفع — Payment was not completed
+        لم يتم إتمام الدفع / Payment was not completed
       </div>
       <div class="order-info-row">
         <span class="order-info-label">رقم الطلب</span>
         <span class="order-info-value" id="fOrderId">—</span>
       </div>
-      <p style="font-size:13px; color:#4b5563; margin-top:8px;">
-        بياناتك محفوظة. يمكنك إعادة المحاولة — Your data is saved. You can retry payment.
+      <p style="font-size:13px; color:#4b5563; margin-top:8px; text-align:center;">
+        بياناتك محفوظة. يمكنك إعادة المحاولة / Your data is saved. You can retry payment.
       </p>
       <button class="btn-main" id="btnRetryPayment" style="margin-top:12px;">
         إعادة المحاولة / Try Payment Again
@@ -86,7 +85,7 @@
     </div>
 
     <button class="btn-secondary" style="margin-top:14px;" onclick="window.location.href='/'">
-      ← العودة للرئيسية / Back to Home
+      العودة للرئيسية / Back to Home
     </button>
   </div>
 
@@ -136,8 +135,7 @@
     }
 
     function showPaid(data) {
-      document.getElementById("headerIcon").textContent = "✓";
-      document.getElementById("headerTitle").textContent = "تم الدفع بنجاح!";
+      document.getElementById("headerTitle").textContent = "تم الدفع بنجاح";
       document.getElementById("headerSub").textContent = "Payment Successful — Download your permits below";
 
       document.getElementById("sOrderId").textContent = data.orderId;
@@ -194,7 +192,7 @@
             ? `<a href="/print/${p.permitId}" target="_blank" class="btn-download-link">
                  تنزيل PDF / Download
                </a>`
-            : `<span>⏳ جاري الإنشاء...</span>`
+            : `<span>جاري الإنشاء...</span>`
           }
         `;
         list.appendChild(li);
@@ -217,7 +215,6 @@
     }
 
     function showFailed(data) {
-      document.getElementById("headerIcon").textContent = "✕";
       document.getElementById("headerTitle").textContent = "لم يتم الدفع";
       document.getElementById("headerSub").textContent = "Payment was not completed";
       document.getElementById("fOrderId").textContent = data.orderId;

@@ -3,57 +3,71 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>بوابة الدفع الإلكتروني UBL | UBL Secure Payment Gateway</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" />
+<title>UBL E-Commerce Payment Gateway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" />
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-    background: #eef2f6;
+    font-family: 'Inter', 'Tajawal', 'Segoe UI', Arial, sans-serif;
+    background: #f1f5f9;
     color: #1e293b;
-    padding: 24px 16px;
+    padding: 32px 16px;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    -webkit-font-smoothing: antialiased;
   }
   .checkout-container {
-    max-width: 520px;
+    max-width: 500px;
     width: 100%;
     background: #ffffff;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
     overflow: hidden;
     border: 1px solid #e2e8f0;
   }
+
   /* UBL Gateway Header */
   .ubl-header {
-    background: linear-gradient(135deg, #003366 0%, #002244 100%);
+    background: #002b5c;
     color: #ffffff;
-    padding: 20px 24px;
+    padding: 18px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     direction: ltr;
+    border-bottom: 3px solid #0056b3;
   }
   .ubl-logo-box {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
   }
   .ubl-brand-badge {
-    background: #0055a5;
-    color: #fff;
+    background: #0056b3;
+    color: #ffffff;
     font-weight: 800;
-    font-size: 18px;
+    font-size: 17px;
     padding: 4px 10px;
     border-radius: 4px;
     letter-spacing: 1px;
+    font-family: 'Inter', sans-serif;
+  }
+  .ubl-gateway-info {
+    display: flex;
+    flex-direction: column;
   }
   .ubl-gateway-title {
     font-size: 13px;
-    color: #e2e8f0;
-    line-height: 1.3;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.2;
+  }
+  .ubl-gateway-sub {
+    font-size: 11px;
+    color: #94a3b8;
   }
   .ubl-security-badge {
     display: flex;
@@ -61,10 +75,17 @@
     gap: 6px;
     font-size: 11px;
     color: #93c5fd;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.08);
     padding: 4px 10px;
-    border-radius: 20px;
+    border-radius: 4px;
+    font-weight: 500;
   }
+  .ubl-security-badge svg {
+    width: 12px;
+    height: 12px;
+    fill: currentColor;
+  }
+
   /* Order Summary Banner */
   .order-banner {
     background: #f8fafc;
@@ -76,144 +97,168 @@
     direction: rtl;
   }
   .order-banner-info {
-    font-size: 12.5px;
+    font-size: 13px;
     color: #64748b;
   }
   .order-banner-merchant {
     font-weight: 700;
     color: #0f172a;
     font-size: 14px;
+    margin-bottom: 2px;
   }
   .order-banner-amount {
     text-align: left;
     direction: ltr;
   }
   .amount-val {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 800;
-    color: #003366;
+    color: #002b5c;
+    font-family: 'Inter', sans-serif;
   }
   .amount-currency {
     font-size: 12px;
     color: #64748b;
     font-weight: 600;
   }
-  /* Card Form */
+
+  /* Card Form Body */
   .checkout-body {
     padding: 24px;
     direction: rtl;
   }
+
+  /* Card Brand Badges */
   .card-logos {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 18px;
+    gap: 8px;
+    margin-bottom: 20px;
     justify-content: flex-end;
     direction: ltr;
   }
   .card-logo-pill {
-    padding: 4px 8px;
-    border: 1px solid #cbd5e1;
+    padding: 4px 10px;
+    border: 1px solid #e2e8f0;
     border-radius: 4px;
     font-size: 11px;
     font-weight: 700;
-    color: #475569;
+    color: #64748b;
     background: #f8fafc;
+    letter-spacing: 0.3px;
+    transition: all 0.2s;
   }
   .card-logo-pill.active {
-    border-color: #0055a5;
+    border-color: #0056b3;
     background: #eff6ff;
-    color: #0055a5;
+    color: #0056b3;
   }
-  /* Sandbox Autofill Banner */
+
+  /* Sandbox Helper */
   .sandbox-helper {
-    background: #eff6ff;
-    border: 1px dashed #93c5fd;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
     border-radius: 6px;
     padding: 10px 14px;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 12px;
-    color: #1e40af;
+    color: #166534;
+  }
+  .sandbox-helper-title {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
   .btn-autofill {
-    background: #2563eb;
-    color: #fff;
+    background: #16a34a;
+    color: #ffffff;
     border: none;
     padding: 4px 10px;
     border-radius: 4px;
     font-size: 11px;
     font-weight: 600;
     cursor: pointer;
+    transition: background 0.15s;
   }
-  .btn-autofill:hover { background: #1d4ed8; }
+  .btn-autofill:hover {
+    background: #15803d;
+  }
+
   /* Form Inputs */
   .form-group {
     margin-bottom: 16px;
   }
   .form-label {
     display: block;
-    font-size: 12.5px;
+    font-size: 12px;
     font-weight: 600;
     color: #334155;
     margin-bottom: 6px;
   }
-  .input-wrapper {
-    position: relative;
+  .form-label span {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 400;
   }
   .form-input {
     width: 100%;
     padding: 10px 12px;
-    border: 1.5px solid #cbd5e1;
+    border: 1px solid #cbd5e1;
     border-radius: 6px;
     font-size: 14px;
     color: #0f172a;
-    font-family: inherit;
+    font-family: 'Inter', sans-serif;
     direction: ltr;
     text-align: left;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    background: #ffffff;
   }
   .form-input:focus {
     outline: none;
-    border-color: #0055a5;
-    box-shadow: 0 0 0 3px rgba(0, 85, 165, 0.12);
+    border-color: #0056b3;
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.12);
   }
   .form-input.name-input {
     direction: rtl;
     text-align: right;
+    font-family: inherit;
   }
   .form-row-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
   }
-  /* Buttons */
+
+  /* Submit Pay Button */
   .btn-pay {
     width: 100%;
-    background: linear-gradient(135deg, #003366 0%, #0055a5 100%);
+    background: #002b5c;
     color: #ffffff;
     border: none;
-    padding: 14px;
-    border-radius: 8px;
-    font-size: 15px;
+    padding: 13px 18px;
+    border-radius: 6px;
+    font-size: 14.5px;
     font-weight: 700;
     cursor: pointer;
-    margin-top: 8px;
+    margin-top: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: transform 0.1s, background 0.2s;
+    transition: background 0.15s, transform 0.1s;
+    font-family: inherit;
   }
   .btn-pay:hover {
-    background: linear-gradient(135deg, #002244 0%, #004080 100%);
-    transform: translateY(-1px);
+    background: #001f42;
   }
-  .btn-pay:disabled {
-    background: #94a3b8;
-    cursor: not-allowed;
-    transform: none;
+  .btn-pay svg {
+    width: 15px;
+    height: 15px;
+    fill: currentColor;
   }
   .btn-cancel {
     width: 100%;
@@ -221,39 +266,63 @@
     color: #64748b;
     border: none;
     padding: 10px;
-    font-size: 13px;
+    font-size: 12.5px;
     cursor: pointer;
     margin-top: 6px;
     font-weight: 500;
+    font-family: inherit;
+    transition: color 0.15s;
   }
-  .btn-cancel:hover { color: #dc2626; }
+  .btn-cancel:hover {
+    color: #dc2626;
+  }
+
   /* Processing State Overlay */
   .processing-overlay {
     display: none;
     text-align: center;
-    padding: 30px 10px;
+    padding: 36px 12px;
   }
   .spinner-3ds {
-    width: 44px;
-    height: 44px;
-    border: 4px solid #e2e8f0;
-    border-top-color: #0055a5;
+    width: 42px;
+    height: 42px;
+    border: 3px solid #e2e8f0;
+    border-top-color: #0056b3;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
-    margin: 0 auto 16px;
+    margin: 0 auto 18px;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .processing-title { font-size: 16px; font-weight: 700; color: #003366; margin-bottom: 6px; }
-  .processing-sub { font-size: 13px; color: #64748b; }
+  .processing-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #002b5c;
+    margin-bottom: 6px;
+  }
+  .processing-sub {
+    font-size: 12.5px;
+    color: #64748b;
+    line-height: 1.5;
+  }
+
   /* Footer */
   .checkout-footer {
     background: #f8fafc;
     border-top: 1px solid #e2e8f0;
     padding: 12px 24px;
     text-align: center;
-    font-size: 11.5px;
+    font-size: 11px;
     color: #94a3b8;
     direction: ltr;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .checkout-footer span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
 </style>
 </head>
@@ -264,21 +333,22 @@
   <div class="ubl-header">
     <div class="ubl-logo-box">
       <span class="ubl-brand-badge">UBL</span>
-      <div>
-        <div style="font-weight:700;font-size:14px;">E-Commerce Payment</div>
-        <div class="ubl-gateway-title">United Bank Limited Secure Gateway</div>
+      <div class="ubl-gateway-info">
+        <span class="ubl-gateway-title">E-Commerce Payment Gateway</span>
+        <span class="ubl-gateway-sub">United Bank Limited</span>
       </div>
     </div>
     <div class="ubl-security-badge">
-      🔒 256-bit SSL
+      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+      256-bit SSL
     </div>
   </div>
 
   <!-- Order Details Banner -->
   <div class="order-banner">
     <div class="order-banner-info">
-      <div class="order-banner-merchant">أجير — إصدار التصاريح (Ajeer HR)</div>
-      <div>رقم الطلب / Order: <strong id="dispOrderId">—</strong></div>
+      <div class="order-banner-merchant">أجير — إصدار التصاريح (Ajeer HR Services)</div>
+      <div>رقم الطلب: <strong id="dispOrderId" style="color:#0f172a; font-family:'Inter',sans-serif;">—</strong></div>
     </div>
     <div class="order-banner-amount">
       <div class="amount-val" id="dispAmount">0.00</div>
@@ -299,54 +369,65 @@
 
       <!-- Sandbox Quick Helper -->
       <div class="sandbox-helper">
-        <span>🧪 بطاقة تجريبية (Sandbox Mode)</span>
-        <button type="button" class="btn-autofill" onclick="autofillTestCard()">تعبئة تلقائية / Autofill</button>
+        <div class="sandbox-helper-title">
+          <span>Sandbox Test Mode</span>
+        </div>
+        <button type="button" class="btn-autofill" onclick="autofillTestCard()">Autofill Test Card</button>
       </div>
 
       <!-- Cardholder Name -->
       <div class="form-group">
-        <label class="form-label">اسم حامل البطاقة / Cardholder Name</label>
+        <label class="form-label">
+          اسم حامل البطاقة <span>/ Cardholder Name</span>
+        </label>
         <input type="text" id="cardHolder" class="form-input name-input" placeholder="e.g. MOHAMMED AHMED" required />
       </div>
 
       <!-- Card Number -->
       <div class="form-group">
-        <label class="form-label">رقم البطاقة / Card Number (16 Digits)</label>
+        <label class="form-label">
+          رقم البطاقة <span>/ Card Number</span>
+        </label>
         <input type="text" id="cardNumber" class="form-input" placeholder="4000 1234 5678 9010" maxlength="19" required />
       </div>
 
       <!-- Expiry + CVV -->
       <div class="form-row-2">
         <div class="form-group">
-          <label class="form-label">تاريخ الانتهاء / Expiry</label>
+          <label class="form-label">
+            تاريخ الانتهاء <span>/ Expiry (MM/YY)</span>
+          </label>
           <input type="text" id="cardExpiry" class="form-input" placeholder="MM / YY" maxlength="7" required />
         </div>
         <div class="form-group">
-          <label class="form-label">رمز التحقق / CVV</label>
+          <label class="form-label">
+            رمز التحقق <span>/ CVV</span>
+          </label>
           <input type="password" id="cardCvv" class="form-input" placeholder="123" maxlength="4" required />
         </div>
       </div>
 
       <!-- Submit Pay Button -->
       <button type="submit" class="btn-pay" id="btnPay">
-        <span>🔒 تأكيد ودفع / Pay Securely —</span>
-        <span id="btnPayAmount">SAR 22.35</span>
+        <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        <span>تأكيد ودفع</span>
+        <span id="btnPayAmount" style="font-family:'Inter',sans-serif; font-weight:700;">SAR 22.35</span>
       </button>
 
-      <button type="button" class="btn-cancel" onclick="cancelPayment()">إلغاء العملية / Cancel Payment</button>
+      <button type="button" class="btn-cancel" onclick="cancelPayment()">إلغاء العملية / Cancel</button>
     </form>
 
     <!-- Processing / 3DS Simulator View -->
     <div class="processing-overlay" id="processingOverlay">
       <div class="spinner-3ds"></div>
-      <div class="processing-title">جاري التحقق عبر 3D Secure...</div>
-      <div class="processing-sub">Connecting with Card Issuer & Verifying Transaction...</div>
+      <div class="processing-title">جاري المعالجة والتحقق عبر 3D Secure...</div>
+      <div class="processing-sub">Connecting with Card Issuer & Verifying Transaction...<br>Please do not refresh or close this window.</div>
     </div>
   </div>
 
   <!-- Gateway Footer -->
   <div class="checkout-footer">
-    Verified by Visa • Mastercard Identity Check • UBL Payment Gateway
+    <span>Verified by Visa</span> • <span>Mastercard Identity Check</span> • <span>UBL IPG</span>
   </div>
 </div>
 
@@ -407,7 +488,7 @@
 
     const rawCard = cardInput.value.replace(/\s/g, "");
     if (rawCard.length < 15) {
-      alert("يرجى إدخال رقم بطاقة صحيح مكون من 16 رقماً / Please enter a valid card number");
+      alert("يرجى إدخال رقم بطاقة صحيح / Please enter a valid card number");
       return;
     }
 
