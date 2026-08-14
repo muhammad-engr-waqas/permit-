@@ -12,11 +12,45 @@
     <p class="sub">Fill in the details below to generate the permit PDF with QR code.</p>
 
     <form id="permitForm">
+      <div id="personsContainer">
+        <!-- Person forms will be rendered here (Person 1 is rendered by default) -->
+      </div>
+
+      <!-- + Add Another Person Button -->
+      <button type="button" class="btn-add-another" id="btnAddPerson">
+        + إضافة شخص آخر / Add Another Person
+      </button>
+
+      <!-- Price summary -->
+      <div class="order-summary-box" id="summaryBox">
+        <span>المبلغ الإجمالي / Total Amount (<span id="personCountText">1</span> شخص)</span>
+        <strong id="totalPriceText">SAR 22.35</strong>
+      </div>
+
+      <button type="submit" id="submitBtn">
+        <span id="btnText">إنشاء وتنزيل PDF / Generate &amp; Download PDF — SAR 22.35</span>
+        <span id="spinner" style="display:none"> ...</span>
+      </button>
+      <p id="statusMsg"></p>
+    </form>
+  </div>
+
+  <!-- Template for each person form -->
+  <template id="personTemplate">
+    <div class="person-block" data-person-index="0">
+      <div class="person-header" style="display:none;">
+        <span class="person-header-title">شخص 1 / Person 1</span>
+        <button type="button" class="btn-remove-person">حذف / Remove</button>
+      </div>
+
       <fieldset>
         <legend>بيانات العامل / Laborer Information</legend>
 
         <label>اسم العامل — English (مطلوب)
           <input type="text" name="laborerNameEn" required placeholder="" style="text-transform:uppercase;" />
+        </label>
+        <label>اسم العامل — Arabic (optional)
+          <input type="text" name="laborerNameAr" placeholder="" dir="rtl" />
         </label>
         <label>المهنة — Occupation English (مطلوب)
           <input type="text" name="occupationEn" required placeholder="" />
@@ -73,14 +107,8 @@
           <input type="date" name="permitEndDate" required />
         </label>
       </fieldset>
-
-      <button type="submit" id="submitBtn">
-        <span id="btnText">إنشاء وتنزيل PDF / Generate &amp; Download PDF</span>
-        <span id="spinner" style="display:none"> ...</span>
-      </button>
-      <p id="statusMsg"></p>
-    </form>
-  </div>
+    </div>
+  </template>
 
   <script src="script.js"></script>
 </body>

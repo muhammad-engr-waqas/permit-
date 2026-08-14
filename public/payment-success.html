@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>تم الدفع بنجاح | Payment Successful</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <div class="payment-icon" id="headerIcon">⏳</div>
+    <h1 id="headerTitle">جاري التحقق من الدفع</h1>
+    <p class="sub" id="headerSub" style="text-align:center;">Verifying payment — please wait...</p>
+
+    <!-- State: Verifying -->
+    <div id="stateVerifying">
+      <div class="spinner"></div>
+      <p id="verifyMsg" style="text-align:center; font-size:13.5px; color:#4b5563;">
+        جاري التحقق من عملية الدفع... / Verifying payment status...
+      </p>
+    </div>
+
+    <!-- State: Success -->
+    <div id="stateSuccess" style="display:none;">
+      <div class="badge-valid" id="successAlert">
+        ✓ تم التحقق من الدفع بنجاح — Payment Verified
+      </div>
+
+      <div id="orderSummarySuccess" style="margin-bottom:18px;">
+        <div class="order-info-row">
+          <span class="order-info-label">رقم الطلب / Order ID</span>
+          <span class="order-info-value" id="sOrderId">—</span>
+        </div>
+        <div class="order-info-row">
+          <span class="order-info-label">عدد الأشخاص / Persons</span>
+          <span class="order-info-value" id="sPersons">—</span>
+        </div>
+        <div class="order-info-row">
+          <span class="order-info-label">المبلغ المدفوع / Amount Paid</span>
+          <span class="order-info-value" id="sAmount">—</span>
+        </div>
+        <div class="order-info-row">
+          <span class="order-info-label">تاريخ الدفع / Paid Date</span>
+          <span class="order-info-value" id="sPaidAt">—</span>
+        </div>
+      </div>
+
+      <!-- PDF Section -->
+      <div id="pdfSection">
+        <div id="pdfGenerating" style="display:none; text-align:center; padding:16px;">
+          <div class="spinner"></div>
+          جاري إنشاء التصاريح... / Generating permits...
+        </div>
+
+        <div id="pdfReady" style="display:none;">
+          <p style="font-size:13.5px; font-weight:700; color:#0f766e; margin-bottom:10px;">
+            التصاريح المتاحة للتحميل / Download Permits:
+          </p>
+          <ul class="download-list" id="downloadList"></ul>
+
+          <button class="btn-main" id="btnDownloadAll" onclick="downloadAll()">
+            تحميل جميع التصاريح / Download All PDFs
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- State: Failed/Cancelled -->
+    <div id="stateFailed" style="display:none;">
+      <div class="alert alert-error" id="failedAlert">
+        لم يتم الدفع — Payment was not completed
+      </div>
+      <div class="order-info-row">
+        <span class="order-info-label">رقم الطلب</span>
+        <span class="order-info-value" id="fOrderId">—</span>
+      </div>
+      <p style="font-size:13px; color:#4b5563; margin-top:8px;">
+        بياناتك محفوظة. يمكنك إعادة المحاولة — Your data is saved. You can retry payment.
+      </p>
+      <button class="btn-main" id="btnRetryPayment" style="margin-top:12px;">
+        إعادة المحاولة / Try Payment Again
+      </button>
+      <button class="btn-secondary" onclick="window.location.href='/'">
+        إنشاء طلب جديد / New Order
+      </button>
+    </div>
+
+    <button class="btn-secondary" style="margin-top:14px;" onclick="window.location.href='/'">
+      ← العودة للرئيسية / Back to Home
+    </button>
+  </div>
+
+  <script>
+    const params  = new URLSearchParams(window.location.search);
+    const orderId = params.get("orderId") || localStorage.getItem("lastOrderId");
+
+    let pollTimer = null;
+    let pollCount = 0;
+    const MAX_POLLS = 40;
+
+    if (!orderId) {
+      showState("failed");
+      document.getElementById("failedAlert").textContent = "Order ID not found — please go back.";
+    } else {
+      pollStatus();
+    }
+
+    async function pollStatus() {
+      try {
+        const res  = await fetch("/api/payments/status/" + orderId);
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || "Status check failed");
+
+        if (data.paymentStatus === "PAID") {
+          clearInterval(pollTimer);
+          showPaid(data);
+        } else if (["FAILED", "CANCELLED", "EXPIRED"].includes(data.paymentStatus)) {
+          clearInterval(pollTimer);
+          showFailed(data);
+        } else {
+          pollCount++;
+          if (pollCount >= MAX_POLLS) {
+            clearInterval(pollTimer);
+            document.getElementById("verifyMsg").textContent = "تأخر التحقق. يرجى تحديث الصفحة.";
+            return;
+          }
+          if (!pollTimer) {
+            pollTimer = setInterval(pollStatus, 3000);
+          }
+          showState("verifying");
+        }
+      } catch (err) {
+        console.error("Poll error:", err);
+      }
+    }
+
+    function showPaid(data) {
+      document.getElementById("headerIcon").textContent = "✓";
+      document.getElementById("headerTitle").textContent = "تم الدفع بنجاح!";
+      document.getElementById("headerSub").textContent = "Payment Successful — Download your permits below";
+
+      document.getElementById("sOrderId").textContent = data.orderId;
+      document.getElementById("sPersons").textContent = data.numberOfPersons;
+      document.getElementById("sAmount").textContent = `${data.currency} ${parseFloat(data.totalAmount).toFixed(2)}`;
+      document.getElementById("sPaidAt").textContent = data.paidAt
+        ? new Date(data.paidAt).toLocaleString("ar-SA")
+        : "—";
+
+      showState("success");
+
+      if (data.pdfStatus === "READY") {
+        buildDownloadList(data.persons);
+      } else {
+        document.getElementById("pdfGenerating").style.display = "block";
+        document.getElementById("pdfReady").style.display = "none";
+        pollPdfStatus();
+      }
+    }
+
+    let pdfPollCount = 0;
+    async function pollPdfStatus() {
+      const res  = await fetch("/api/payments/status/" + orderId).catch(() => null);
+      if (!res) return;
+      const data = await res.json().catch(() => null);
+      if (!data) return;
+
+      if (data.pdfStatus === "READY") {
+        document.getElementById("pdfGenerating").style.display = "none";
+        buildDownloadList(data.persons);
+      } else {
+        pdfPollCount++;
+        if (pdfPollCount < 30) {
+          setTimeout(pollPdfStatus, 2000);
+        }
+      }
+    }
+
+    function buildDownloadList(persons) {
+      document.getElementById("pdfGenerating").style.display = "none";
+      document.getElementById("pdfReady").style.display = "block";
+
+      const list = document.getElementById("downloadList");
+      list.innerHTML = "";
+
+      persons.forEach((p, i) => {
+        const li = document.createElement("li");
+        li.className = "download-item";
+
+        const ready = p.pdfStatus === "READY" && p.permitId;
+        li.innerHTML = `
+          <span class="download-item-title">${p.name || "شخص " + p.personNumber}</span>
+          ${ready
+            ? `<a href="/print/${p.permitId}" target="_blank" class="btn-download-link">
+                 تنزيل PDF / Download
+               </a>`
+            : `<span>⏳ جاري الإنشاء...</span>`
+          }
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    async function downloadAll() {
+      try {
+        const res  = await fetch("/api/orders/" + orderId + "/download-all");
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed");
+
+        const readyPermits = data.permits.filter(p => p.printUrl);
+        readyPermits.forEach((p, i) => {
+          setTimeout(() => { window.open(p.printUrl, "_blank"); }, i * 500);
+        });
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    function showFailed(data) {
+      document.getElementById("headerIcon").textContent = "✕";
+      document.getElementById("headerTitle").textContent = "لم يتم الدفع";
+      document.getElementById("headerSub").textContent = "Payment was not completed";
+      document.getElementById("fOrderId").textContent = data.orderId;
+      showState("failed");
+
+      document.getElementById("btnRetryPayment").onclick = () => {
+        localStorage.setItem("lastOrderId", orderId);
+        window.location.href = "/payment-processing.html?orderId=" + orderId;
+      };
+    }
+
+    function showState(state) {
+      document.getElementById("stateVerifying").style.display = state === "verifying" ? "block" : "none";
+      document.getElementById("stateSuccess").style.display   = state === "success"   ? "block" : "none";
+      document.getElementById("stateFailed").style.display    = state === "failed"    ? "block" : "none";
+    }
+  </script>
+</body>
+</html>

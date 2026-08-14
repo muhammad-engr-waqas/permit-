@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>فشل الدفع | Payment Failed</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <div class="payment-icon">✕</div>
+    <h1>لم يتم إتمام الدفع</h1>
+    <p class="sub" style="text-align:center;">Payment was not completed — your data has been saved</p>
+
+    <div class="alert alert-error" id="failReason">
+      عملية الدفع لم تكتمل أو تم إلغاؤها. — Payment was not completed or was cancelled.
+    </div>
+
+    <div id="orderDetails" style="display:none; margin-bottom:16px;">
+      <div class="order-info-row">
+        <span class="order-info-label">رقم الطلب</span>
+        <span class="order-info-value" id="fOrderId">—</span>
+      </div>
+      <div class="order-info-row">
+        <span class="order-info-label">المبلغ</span>
+        <span class="order-info-value" id="fAmount">—</span>
+      </div>
+      <div class="order-info-row">
+        <span class="order-info-label">الحالة</span>
+        <span class="order-info-value" id="fStatus">—</span>
+      </div>
+    </div>
+
+    <p style="font-size:13px; color:#4b5563; text-align:center; margin-bottom:16px;">
+      💾 بياناتك محفوظة — Your information has been preserved. You do not need to re-enter details.
+    </p>
+
+    <button class="btn-main" id="btnRetry">
+      إعادة المحاولة / Try Payment Again
+    </button>
+
+    <button class="btn-secondary" onclick="window.location.href='/'">
+      ← إنشاء طلب جديد / New Order
+    </button>
+  </div>
+
+  <script>
+    const params  = new URLSearchParams(window.location.search);
+    const orderId = params.get("orderId") || localStorage.getItem("lastOrderId");
+    const errMsg  = params.get("error");
+
+    if (errMsg) {
+      const reasonMap = {
+        missing_order: "Order ID missing — please go back.",
+        order_not_found: "Order not found.",
+        server_error: "A server error occurred. Please try again.",
+      };
+      document.getElementById("failReason").textContent = "⚠ " + (reasonMap[errMsg] || errMsg);
+    }
+
+    if (orderId) {
+      fetch("/api/orders/" + orderId)
+        .then(r => r.json())
+        .then(data => {
+          document.getElementById("fOrderId").textContent = data.orderId;
+          document.getElementById("fAmount").textContent = `${data.currency} ${parseFloat(data.totalAmount).toFixed(2)}`;
+          document.getElementById("fStatus").textContent = data.paymentStatus;
+          document.getElementById("orderDetails").style.display = "block";
+
+          if (data.paymentStatus === "PAID") {
+            window.location.href = "/payment-success.html?orderId=" + orderId;
+          }
+        })
+        .catch(() => {});
+    }
+
+    document.getElementById("btnRetry").onclick = () => {
+      if (!orderId) { alert("No order ID found. Please create a new order."); return; }
+      localStorage.setItem("lastOrderId", orderId);
+      window.location.href = "/payment-processing.html?orderId=" + orderId;
+    };
+  </script>
+</body>
+</html>

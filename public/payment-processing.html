@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>معالجة الدفع | Payment Processing</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <div class="payment-icon">⏳</div>
+    <h1>جاري إعداد الدفع</h1>
+    <p class="sub" style="text-align:center;">Payment Processing / Redirecting to Secure Gateway</p>
+
+    <div id="orderInfo">
+      <div class="order-info-row">
+        <span class="order-info-label">رقم الطلب / Order ID</span>
+        <span class="order-info-value" id="infoOrderId">—</span>
+      </div>
+      <div class="order-info-row">
+        <span class="order-info-label">عدد الأشخاص / Persons</span>
+        <span class="order-info-value" id="infoPersons">—</span>
+      </div>
+      <div class="order-info-row">
+        <span class="order-info-label">المبلغ الإجمالي / Total Amount</span>
+        <span class="order-info-value" id="infoAmount">—</span>
+      </div>
+      <div class="order-info-row">
+        <span class="order-info-label">بوابة الدفع / Payment Gateway</span>
+        <span class="order-info-value">UBL Secure Payment</span>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <div class="spinner" id="spinner"></div>
+      <p id="statusMsg" style="text-align:center; font-size:13.5px; color:#4b5563;">
+        جاري إنشاء جلسة الدفع الآمنة... / Creating secure payment session...
+      </p>
+    </div>
+
+    <div id="errorBox" class="alert alert-error" style="display:none; margin-top:16px;"></div>
+
+    <button id="btnRetry" class="btn-main" style="display:none; margin-top:12px;" onclick="initPayment()">
+      إعادة المحاولة / Retry
+    </button>
+
+    <button class="btn-secondary" onclick="window.location.href='/'">
+      ← العودة للنموذج / Go Back to Form
+    </button>
+  </div>
+
+  <script>
+    const params  = new URLSearchParams(window.location.search);
+    const orderId = params.get("orderId") || localStorage.getItem("lastOrderId");
+
+    if (!orderId) {
+      document.getElementById("statusMsg").textContent = "Order ID missing — please go back.";
+      document.getElementById("spinner").style.display = "none";
+    } else {
+      document.getElementById("infoOrderId").textContent = orderId;
+
+      fetch("/api/orders/" + orderId)
+        .then(r => r.json())
+        .then(order => {
+          document.getElementById("infoPersons").textContent = order.numberOfPersons;
+          document.getElementById("infoAmount").textContent = `${order.currency} ${parseFloat(order.totalAmount).toFixed(2)}`;
+
+          if (order.paymentStatus === "PAID") {
+            window.location.href = "/payment-success.html?orderId=" + orderId;
+            return;
+          }
+          initPayment();
+        })
+        .catch(() => {
+          showError("Could not load order. Please go back and try again.");
+        });
+    }
+
+    async function initPayment() {
+      document.getElementById("btnRetry").style.display = "none";
+      document.getElementById("errorBox").style.display = "none";
+      document.getElementById("spinner").style.display = "block";
+      document.getElementById("statusMsg").textContent =
+        "جاري إنشاء جلسة الدفع... / Creating payment session...";
+
+      try {
+        const res = await fetch("/api/payments/create", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ orderId }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          if (res.status === 400 && data.orderId) {
+            window.location.href = "/payment-success.html?orderId=" + orderId;
+            return;
+          }
+          throw new Error(data.error || "Payment session creation failed");
+        }
+
+        document.getElementById("statusMsg").textContent =
+          "✓ جاري التوجيه إلى بوابة الدفع الآمنة... / Redirecting to secure gateway...";
+
+        setTimeout(() => {
+          window.location.href = data.paymentUrl;
+        }, 800);
+
+      } catch (err) {
+        showError(err.message);
+      }
+    }
+
+    function showError(msg) {
+      document.getElementById("spinner").style.display = "none";
+      document.getElementById("statusMsg").textContent = "";
+      const box = document.getElementById("errorBox");
+      box.textContent = "⚠ " + msg;
+      box.style.display = "block";
+      document.getElementById("btnRetry").style.display = "block";
+    }
+  </script>
+</body>
+</html>
