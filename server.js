@@ -80,16 +80,56 @@ app.get("/payment-failed.html", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "payment-failed.html"));
 });
 
-// ── Start ────────────────────────────────────────────────────────────────────
-async function start() {
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("MongoDB connected");
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  } catch (err) {
-    console.error("Failed to start server:", err.message);
-    process.exit(1);
+// ── Database Connection Helper ───────────────────────────────────────────────
+let isConnected = false;
+
+async function connectDB() {
+  if (isConnected || mongoose.connection.readyState >= 1) {
+    isConnected = true;
+    return;
   }
+
+  const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
+
+  if (!mongoUri) {
+    throw new Error(
+      "MongoDB connection string is missing. Please configure MONGO_URI (or MONGODB_URI) in your environment variables."
+    );
+  }
+
+  const conn = await mongoose.connect(mongoUri);
+  isConnected = !!conn.connections[0].readyState;
+  console.log("MongoDB connected");
 }
 
-start();
+// Ensure database is connected before handling requests
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error("Database connection error:", err.message);
+    if (req.path.startsWith("/api/")) {
+      return res.status(500).json({
+        error: "Database Connection Error",
+        message: err.message,
+        hint: "Please ensure MONGO_URI or MONGODB_URI is properly configured in your Vercel Environment Variables."
+      });
+    }
+    return res.status(500).send(`<h2>500 - Database Connection Error</h2><p>${err.message}</p><p>Please ensure MONGO_URI is set in Vercel Environment Variables.</p>`);
+  }
+});
+
+// ── Start (Local vs Serverless) ───────────────────────────────────────────────
+if (process.env.NODE_ENV !== "test" && !process.env.VERCEL) {
+  connectDB()
+    .then(() => {
+      app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    })
+    .catch((err) => {
+      console.error("Failed to start local server:", err.message);
+    });
+}
+
+module.exports = app;
+
