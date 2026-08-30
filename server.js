@@ -16,12 +16,64 @@ const downloadRoutes = require("./routes/downloadRoutes");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// ── Database Connection Helper (Serverless-optimized) ───────────────────────
+let cachedPromise = null;
+
+async function connectDB() {
+  if (mongoose.connection.readyState >= 1) {
+    return;
+  }
+
+  if (!cachedPromise) {
+    const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
+
+    if (!mongoUri) {
+      throw new Error(
+        "MongoDB connection string is missing. Please configure MONGO_URI (or MONGODB_URI) in your environment variables."
+      );
+    }
+
+    const opts = {
+      bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
+    };
+
+    cachedPromise = mongoose.connect(mongoUri, opts);
+  }
+
+  try {
+    await cachedPromise;
+  } catch (err) {
+    cachedPromise = null;
+    throw err;
+  }
+}
+
+// ── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from /public
 app.use(express.static(path.join(__dirname, "public")));
+
+// Ensure database is connected BEFORE handling API and page requests
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error("Database connection error:", err.message);
+    if (req.path.startsWith("/api/")) {
+      return res.status(500).json({
+        error: "Database Connection Error",
+        message: err.message,
+        hint: "Please ensure MONGO_URI is properly configured in your Vercel Environment Variables and that MongoDB Atlas allows IP access (0.0.0.0/0)."
+      });
+    }
+    return res.status(500).send(`<h2>500 - Database Connection Error</h2><p>${err.message}</p><p>Please ensure MONGO_URI is set in Vercel Environment Variables and Network Access allows 0.0.0.0/0.</p>`);
+  }
+});
 
 // ── Existing API ─────────────────────────────────────────────────────────────
 app.use("/api/permits", permitRoutes);
@@ -32,7 +84,7 @@ app.use("/api/payments", paymentRoutes);
 // Download routes are mounted under /api/orders (shares path prefix)
 app.use("/api/orders", downloadRoutes);
 
-// ── Existing page routes (unchanged) ─────────────────────────────────────────
+// ── Existing page routes ─────────────────────────────────────────────────────
 
 // Print page — serves print.html which uses html2pdf.js client-side
 app.get("/print/:id", async (req, res) => {
@@ -78,46 +130,6 @@ app.get("/payment-checkout.html", (req, res) => {
 // Payment failed page
 app.get("/payment-failed.html", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "payment-failed.html"));
-});
-
-// ── Database Connection Helper ───────────────────────────────────────────────
-let isConnected = false;
-
-async function connectDB() {
-  if (isConnected || mongoose.connection.readyState >= 1) {
-    isConnected = true;
-    return;
-  }
-
-  const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
-
-  if (!mongoUri) {
-    throw new Error(
-      "MongoDB connection string is missing. Please configure MONGO_URI (or MONGODB_URI) in your environment variables."
-    );
-  }
-
-  const conn = await mongoose.connect(mongoUri);
-  isConnected = !!conn.connections[0].readyState;
-  console.log("MongoDB connected");
-}
-
-// Ensure database is connected before handling requests
-app.use(async (req, res, next) => {
-  try {
-    await connectDB();
-    next();
-  } catch (err) {
-    console.error("Database connection error:", err.message);
-    if (req.path.startsWith("/api/")) {
-      return res.status(500).json({
-        error: "Database Connection Error",
-        message: err.message,
-        hint: "Please ensure MONGO_URI or MONGODB_URI is properly configured in your Vercel Environment Variables."
-      });
-    }
-    return res.status(500).send(`<h2>500 - Database Connection Error</h2><p>${err.message}</p><p>Please ensure MONGO_URI is set in Vercel Environment Variables.</p>`);
-  }
 });
 
 // ── Start (Local vs Serverless) ───────────────────────────────────────────────
