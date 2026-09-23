@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تسجيل الدخول | نظام تصاريح أجير</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #042f2e 0%, #0f766e 50%, #134e4a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 440px;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 36px 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #0d9488, #14b8a6, #0f766e);
+    }
+
+    .logo-area {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .logo-area img {
+      height: 52px;
+      margin-bottom: 12px;
+      object-fit: contain;
+    }
+
+    .login-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0f766e;
+      margin: 0 0 6px 0;
+      text-align: center;
+    }
+
+    .login-subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      text-align: center;
+      margin: 0 0 24px 0;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+      text-align: right;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      direction: ltr;
+      text-align: left;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #0f766e;
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+    }
+
+    .toggle-password {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #6b7280;
+      font-size: 13px;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+    }
+
+    .toggle-password:hover {
+      color: #0f766e;
+    }
+
+    .btn-login {
+      width: 100%;
+      background: #0f766e;
+      color: #ffffff;
+      border: none;
+      padding: 13px 20px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.25);
+      margin-top: 10px;
+    }
+
+    .btn-login:hover:not(:disabled) {
+      background: #0d635c;
+      box-shadow: 0 6px 16px rgba(15, 118, 110, 0.35);
+    }
+
+    .btn-login:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .error-box {
+      display: none;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      text-align: center;
+      line-height: 1.4;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .spinner-login {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2.5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .login-footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: #9ca3af;
+      border-top: 1px solid #f3f4f6;
+      padding-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="logo-area">
+      <img src="/ajeer-new-logo-copy.png" alt="Ajeer Logo" onerror="this.style.display='none'" />
+      <h1 class="login-title">تسجيل الدخول للنظام</h1>
+      <p class="login-subtitle">Ajeer Permit System Authentication</p>
+    </div>
+
+    <div id="errorAlert" class="error-box"></div>
+
+    <form id="loginForm" autocomplete="on">
+      <div class="form-group">
+        <label class="form-label" for="username">اسم المستخدم / Username</label>
+        <div class="input-wrapper">
+          <input
+            type="text"
+            id="username"
+            name="username"
+            class="form-input"
+            required
+            autocomplete="username"
+            placeholder="admin"
+            autofocus
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">كلمة المرور / Password</label>
+        <div class="input-wrapper">
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-input"
+            required
+            autocomplete="current-password"
+            placeholder="••••••••"
+          />
+          <button type="button" class="toggle-password" id="btnTogglePassword" title="Show/Hide Password">
+            👁
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-login" id="btnLogin">
+        <span id="btnLoginText">تسجيل الدخول / Sign In</span>
+        <span id="loginSpinner" class="spinner-login" style="display: none;"></span>
+      </button>
+    </form>
+
+    <div class="login-footer">
+      منصة أجير — تصاريح العمل والإعارة &copy; 2026
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const errorAlert = document.getElementById("errorAlert");
+    const btnLogin = document.getElementById("btnLogin");
+    const btnLoginText = document.getElementById("btnLoginText");
+    const loginSpinner = document.getElementById("loginSpinner");
+    const btnTogglePassword = document.getElementById("btnTogglePassword");
+    const passwordInput = document.getElementById("password");
+
+    // Toggle password visibility
+    btnTogglePassword.addEventListener("click", () => {
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        btnTogglePassword.textContent = "🙈";
+      } else {
+        passwordInput.type = "password";
+        btnTogglePassword.textContent = "👁";
+      }
+    });
+
+    // Check if already authenticated
+    const existingToken = localStorage.getItem("auth_token");
+    if (existingToken) {
+      fetch("/api/auth/check", {
+        headers: { "Authorization": "Bearer " + existingToken }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.authenticated) {
+          window.location.replace("/");
+        } else {
+          localStorage.removeItem("auth_token");
+        }
+      })
+      .catch(() => {});
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorAlert.style.display = "none";
+      errorAlert.textContent = "";
+
+      const username = document.getElementById("username").value.trim();
+      const password = passwordInput.value;
+
+      if (!username || !password) {
+        showError("يرجى إدخال اسم المستخدم وكلمة المرور / Please fill in all fields");
+        return;
+      }
+
+      btnLogin.disabled = true;
+      loginSpinner.style.display = "inline-block";
+      btnLoginText.textContent = "جاري الدخول... / Signing in...";
+
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || "خطأ في تسجيل الدخول / Invalid credentials");
+        }
+
+        // Save token & username
+        localStorage.setItem("auth_token", data.token);
+        localStorage.setItem("auth_username", data.username);
+
+        // Redirect to permit creation form
+        window.location.replace("/");
+
+      } catch (err) {
+        showError(err.message);
+        btnLogin.disabled = false;
+        loginSpinner.style.display = "none";
+        btnLoginText.textContent = "تسجيل الدخول / Sign In";
+      }
+    });
+
+    function showError(msg) {
+      errorAlert.textContent = msg;
+      errorAlert.style.display = "block";
+    }
+  </script>
+</body>
+</html>

@@ -4,10 +4,26 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>إنشاء تصريح جديد | New Permit</title>
+<script>
+  // Immediate auth check before rendering
+  (function() {
+    var token = localStorage.getItem("auth_token");
+    if (!token) {
+      window.location.replace("/login.html");
+    }
+  })();
+</script>
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="wrapper">
+    <div class="user-bar" id="userBar">
+      <div class="user-info">
+        <span class="user-badge">👤 <span id="userNameDisplay">admin</span></span>
+      </div>
+      <button type="button" class="btn-logout" id="btnLogout">تسجيل الخروج / Logout</button>
+    </div>
+
     <h1>إصدار تصريح موارد بشرية</h1>
     <p class="sub">Fill in the details below to generate the permit PDF with QR code.</p>
 
