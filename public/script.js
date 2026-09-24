@@ -14,18 +14,48 @@ const PRICE_PER_PERSON = 22.35;
 /* ══════════════════════════════════════════════
    AUTHENTICATION & LOGOUT HANDLING
 ══════════════════════════════════════════════ */
-const authToken = null;
-const authUsername = "admin";
+const authToken = localStorage.getItem("auth_token");
+const authUsername = localStorage.getItem("auth_username") || "admin";
 
 const userNameDisplay = document.getElementById("userNameDisplay");
 if (userNameDisplay) {
   userNameDisplay.textContent = authUsername;
 }
 
-const btnLogout = document.getElementById("btnLogout");
+if (btnLogout) {
+  btnLogout.addEventListener("click", async () => {
+    try {
+      if (authToken) {
+        await fetch("/api/auth/logout", {
+          method: "POST",
+          headers: { "Authorization": "Bearer " + authToken }
+        });
+      }
+    } catch (e) {}
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("auth_username");
+    window.location.replace("/login.html");
+  });
+}
 
-
-// Auth disabled — no login required
+// Background token validation
+if (authToken) {
+  fetch("/api/auth/check", {
+    headers: { "Authorization": "Bearer " + authToken }
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (!data.authenticated) {
+        localStorage.removeItem("auth_token");
+        window.location.replace("/login.html");
+      } else if (data.username && userNameDisplay) {
+        userNameDisplay.textContent = data.username;
+      }
+    })
+    .catch(() => {});
+} else {
+  window.location.replace("/login.html");
+}
 
 
 /* ══════════════════════════════════════════════

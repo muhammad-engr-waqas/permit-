@@ -100,12 +100,24 @@ app.use("/api/orders", downloadRoutes);
 
 // ── Existing page routes ─────────────────────────────────────────────────────
 
-// Print page — serves print.html which uses html2pdf.js client-side
+// Print page — injects BASE_URL so QR code works on any network/device
 app.get("/print/:id", async (req, res) => {
   try {
     const permit = await Permit.findById(req.params.id).lean();
     if (!permit) return res.status(404).send("<h2>Permit not found</h2>");
-    res.sendFile(path.join(__dirname, "public", "print.html"));
+
+    const fs = require("fs");
+    const printPath = path.join(__dirname, "public", "print.html");
+    let html = fs.readFileSync(printPath, "utf8");
+
+    // Replace window.location.origin with actual BASE_URL from env
+    const baseUrl = (process.env.BASE_URL || "").replace(/\/$/, "") || ("http://localhost:" + (process.env.PORT || 3000));
+    html = html.replace(
+      'var verifyUrl   = window.location.origin + "/verify/" + permitId;',
+      'var verifyUrl   = "' + baseUrl + '/verify/" + permitId;'
+    );
+
+    res.send(html);
   } catch (err) {
     res.status(400).send("<h2>Invalid permit link</h2>");
   }

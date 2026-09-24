@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>إنشاء تصريح جديد | New Permit</title>
 
+<script>
+  // Login check — redirect to login if no token
+  (function() {
+    var token = localStorage.getItem("auth_token");
+    if (!token) {
+      window.location.replace("/login.html");
+    }
+  })();
+</script>
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -13,6 +22,7 @@
       <div class="user-info">
         <span class="user-badge">👤 <span id="userNameDisplay">admin</span></span>
       </div>
+      <button type="button" class="btn-logout" id="btnLogout">تسجيل الخروج / Logout</button>
     </div>
 
     <h1>إصدار تصريح موارد بشرية</h1>

@@ -3,6 +3,7 @@ const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
 const Order = require("../models/Order");
 const { calculateOrderAmount } = require("../services/payment/paymentService");
+const { requireAuth } = require("../middleware/auth");
 
 // Required permit fields for validation
 const REQUIRED_FIELDS = [
@@ -40,7 +41,7 @@ function generateOrderId() {
  *   customerPhone?: string
  * }
  */
-router.post("/", async (req, res) => {
+router.post("/", requireAuth, async (req, res) => {
   try {
     const { persons, customerEmail, customerPhone } = req.body;
 
