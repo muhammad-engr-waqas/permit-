@@ -111,10 +111,15 @@ app.get("/print/:id", async (req, res) => {
   }
 });
 
-// Verify page — opened when QR code is scanned (Redirects to target link)
+// Verify page — opened when QR code is scanned, shows permit details
 app.get("/verify/:id", async (req, res) => {
-  const redirectUrl = process.env.VERIFY_REDIRECT_URL || "https://qiwaaa.com";
-  return res.redirect(302, redirectUrl);
+  try {
+    const permit = await Permit.findById(req.params.id).lean();
+    if (!permit) return res.status(404).send("<h2>Permit not found</h2>");
+    res.sendFile(path.join(__dirname, "public", "verify.html"));
+  } catch (err) {
+    res.status(400).send("<h2>Invalid permit link</h2>");
+  }
 });
 
 // ── New page routes ───────────────────────────────────────────────────────────
