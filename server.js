@@ -100,7 +100,7 @@ app.use("/api/orders", downloadRoutes);
 
 // ── Existing page routes ─────────────────────────────────────────────────────
 
-// Print page — injects BASE_URL so QR code works on any network/device
+// Print page — injects VERIFY_BASE_URL so QR code points directly to ajeeer.qiwaaa.com
 app.get("/print/:id", async (req, res) => {
   try {
     const permit = await Permit.findById(req.params.id).lean();
@@ -110,11 +110,11 @@ app.get("/print/:id", async (req, res) => {
     const printPath = path.join(__dirname, "public", "print.html");
     let html = fs.readFileSync(printPath, "utf8");
 
-    // Replace window.location.origin with actual BASE_URL from env
-    const baseUrl = (process.env.BASE_URL || "").replace(/\/$/, "") || ("http://localhost:" + (process.env.PORT || 3000));
+    // QR code destination: priority to VERIFY_BASE_URL (ajeeer.qiwaaa.com)
+    const verifyBase = (process.env.VERIFY_BASE_URL || process.env.BASE_URL || "").replace(/\/$/, "") || ("http://localhost:" + (process.env.PORT || 3000));
     html = html.replace(
       'var verifyUrl   = window.location.origin + "/verify/" + permitId;',
-      'var verifyUrl   = "' + baseUrl + '/verify/" + permitId;'
+      'var verifyUrl   = "' + verifyBase + '/verify/" + permitId;'
     );
 
     res.send(html);
@@ -123,11 +123,25 @@ app.get("/print/:id", async (req, res) => {
   }
 });
 
-// Verify page — opened when QR code is scanned, shows permit details
+// Verify page — opened when QR code is scanned, shows permit details on ajeeer.qiwaaa.com
 app.get("/verify/:id", async (req, res) => {
   try {
     const permit = await Permit.findById(req.params.id).lean();
     if (!permit) return res.status(404).send("<h2>Permit not found</h2>");
+
+    // Agar request ajeeer.qiwaaa.com ke ilawa kisi aur production domain (jaise qiwaaa.com) se aaye toh redirect karein
+    const verifyBase = (process.env.VERIFY_BASE_URL || "https://ajeeer.qiwaaa.com").replace(/\/$/, "");
+    try {
+      const targetHost = new URL(verifyBase).hostname.toLowerCase();
+      const currentHost = (req.headers["x-forwarded-host"] || req.headers.host || req.hostname || "").split(":")[0].toLowerCase();
+
+      if (currentHost && currentHost !== targetHost && currentHost !== "localhost" && !currentHost.includes("127.0.0.1")) {
+        return res.redirect(301, `${verifyBase}/verify/${req.params.id}`);
+      }
+    } catch (e) {
+      console.warn("Domain redirect check skipped:", e.message);
+    }
+
     res.sendFile(path.join(__dirname, "public", "verify.html"));
   } catch (err) {
     res.status(400).send("<h2>Invalid permit link</h2>");
