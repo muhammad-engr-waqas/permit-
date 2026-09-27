@@ -16,11 +16,11 @@ async function seedAdminUser() {
       await user.save();
       console.log(`[AUTH] Default admin user seeded successfully: "${adminUsername}"`);
     } else {
-      // If user exists and ADMIN_RESET_PASSWORD is set, update password
-      if (process.env.ADMIN_RESET_PASSWORD === "true") {
+      // If user exists, update password if ADMIN_RESET_PASSWORD=true or if it doesn't match the current ADMIN_PASSWORD
+      if (process.env.ADMIN_RESET_PASSWORD === "true" || !user.validatePassword(adminPassword)) {
         user.setPassword(adminPassword);
         await user.save();
-        console.log(`[AUTH] Admin password updated for: "${adminUsername}"`);
+        console.log(`[AUTH] Admin password updated successfully for: "${adminUsername}"`);
       }
     }
   } catch (err) {
