@@ -7,8 +7,12 @@ const mongoose = require("mongoose");
  */
 const permitSchema = new mongoose.Schema(
   {
-    // ----- Laborer Information / بيانات العامل -----
-    laborerNameEn: { type: String, required: true, trim: true },
+    laborerNameEn: {
+      type: String,
+      required: true,
+      trim: true,
+      set: (v) => (typeof v === "string" ? v.toUpperCase().trim() : v),
+    },
     laborerNameAr: { type: String, trim: true }, // optional Arabic name
     occupationEn: { type: String, required: true, trim: true },
     occupationAr: { type: String, trim: true },

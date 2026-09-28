@@ -151,6 +151,7 @@ function wireArabicGuardForBlock(block) {
   }
 
   enNameInput.addEventListener("input", function() {
+    this.value = this.value.toUpperCase();
     if (hasArabic(this.value)) {
       warn.style.display = "block";
       this.style.borderColor = "#ffc107";
@@ -244,7 +245,11 @@ form.addEventListener("submit", async (e) => {
     const formData = {};
 
     inputs.forEach(input => {
-      formData[input.name] = input.value ? input.value.trim() : "";
+      let val = input.value ? input.value.trim() : "";
+      if (input.name === "laborerNameEn") {
+        val = val.toUpperCase();
+      }
+      formData[input.name] = val;
     });
 
     // Check missing fields

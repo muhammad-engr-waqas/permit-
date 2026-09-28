@@ -280,7 +280,7 @@ function permitTemplate(permit, qrDataUrl, ajeerLogoBase64) {
       <tr><th colspan="4">بيانات العامل</th></tr>
       <tr>
         <td class="lbl-col">اسم العامل</td>
-        <td class="val-col">${permit.laborerNameEn || ''}</td>
+        <td class="val-col" style="text-transform: uppercase;">${(permit.laborerNameEn || '').toUpperCase()}</td>
         <td class="lbl-col">المهنة</td>
         <td class="val-col">${permit.occupationAr || permit.occupationEn || ''}</td>
       </tr>

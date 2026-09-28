@@ -64,6 +64,10 @@ router.post("/", requireAuth, async (req, res) => {
         continue;
       }
 
+      if (formData.laborerNameEn && typeof formData.laborerNameEn === "string") {
+        formData.laborerNameEn = formData.laborerNameEn.trim().toUpperCase();
+      }
+
       const missing = REQUIRED_FIELDS.filter(
         (f) => !formData[f] || formData[f].toString().trim() === ""
       );
@@ -143,7 +147,7 @@ router.get("/:orderId", async (req, res) => {
       personNumber: p.personNumber,
       pdfStatus: p.pdfStatus,
       permitId: p.permitId ? p.permitId.toString() : null,
-      name: p.formData?.laborerNameEn || `Person ${i + 1}`,
+      name: (p.formData?.laborerNameEn || `Person ${i + 1}`).toUpperCase(),
     }));
 
     res.json({

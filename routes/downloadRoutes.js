@@ -74,7 +74,7 @@ router.get("/:orderId/download-all", async (req, res) => {
 
     const permits = order.persons.map((p, i) => ({
       personNumber: p.personNumber,
-      name: p.formData?.laborerNameEn || `Person ${i + 1}`,
+      name: (p.formData?.laborerNameEn || `Person ${i + 1}`).toUpperCase(),
       pdfStatus: p.pdfStatus,
       permitId: p.permitId ? p.permitId.toString() : null,
       printUrl: p.permitId ? `/print/${p.permitId.toString()}` : null,

@@ -48,6 +48,9 @@ async function createPermitsForOrder(order) {
         permit = existingPermit;
       } else {
         const permitCode = await generateUniqueCode();
+        if (formData.laborerNameEn && typeof formData.laborerNameEn === "string") {
+          formData.laborerNameEn = formData.laborerNameEn.trim().toUpperCase();
+        }
         permit = await Permit.create({ ...formData, permitCode });
         console.log(`[Payment] Permit created for Person ${i + 1}: ${permit._id}`);
       }
@@ -161,7 +164,7 @@ router.get("/status/:orderId", async (req, res) => {
 
     const personsOut = order.persons.map((p, i) => ({
       personNumber: p.personNumber,
-      name: p.formData?.laborerNameEn || `Person ${i + 1}`,
+      name: (p.formData?.laborerNameEn || `Person ${i + 1}`).toUpperCase(),
       pdfStatus: p.pdfStatus,
       permitId: p.permitId ? p.permitId.toString() : null,
     }));

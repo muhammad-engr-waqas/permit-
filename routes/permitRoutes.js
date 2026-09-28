@@ -32,6 +32,9 @@ router.post("/", async (req, res) => {
     }
 
     const permitData = { ...req.body };
+    if (permitData.laborerNameEn && typeof permitData.laborerNameEn === "string") {
+      permitData.laborerNameEn = permitData.laborerNameEn.trim().toUpperCase();
+    }
 
     // FIX 4: Generate a truly unique permitCode — loop until DB confirms no duplicate
     if (!permitData.permitCode || permitData.permitCode.trim() === "") {
