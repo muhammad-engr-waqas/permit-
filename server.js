@@ -110,8 +110,11 @@ app.get("/print/:id", async (req, res) => {
     const printPath = path.join(__dirname, "public", "print.html");
     let html = fs.readFileSync(printPath, "utf8");
 
-    // QR code destination: priority to VERIFY_BASE_URL, fallback to https://mhrs.qiwa-ajeer.com
-    const verifyBase = (process.env.VERIFY_BASE_URL || "https://mhrs.qiwa-ajeer.com").replace(/\/$/, "");
+    // QR code destination: points to working live domain so QR opens properly on phone
+    const reqProtocol = req.headers["x-forwarded-proto"] || req.protocol || "https";
+    const reqHost = req.headers["x-forwarded-host"] || req.headers.host || ("localhost:" + (process.env.PORT || 3000));
+    const dynamicBase = `${reqProtocol}://${reqHost}`;
+    const verifyBase = (process.env.VERIFY_BASE_URL || process.env.BASE_URL || dynamicBase).replace(/\/$/, "");
 
     html = html.replace(
       /var verifyUrl\s*=\s*.*?;/,

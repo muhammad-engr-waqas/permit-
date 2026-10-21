@@ -310,7 +310,7 @@
       })
       .then(function(p) {
 
-        var verifyUrl   = "https://mhrs.qiwa-ajeer.com/verify/" + permitId;
+        var verifyUrl   = window.location.origin + "/verify/" + permitId;
         var qrSrc       = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=4&data=" + encodeURIComponent(verifyUrl);
         var permitCode  = p.permitCode || "";
 

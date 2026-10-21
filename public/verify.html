@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ajeer HRS Permit</title>
+  <title>mhrs.qiwa-ajeer | Ajeer HRS Permit</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -173,7 +173,10 @@
   <nav class="navbar">
     <div class="navbar-logo">
       <span class="logo-box">أجير</span>
-      <span class="logo-text">Ajeer HRS</span>
+      <div style="display:flex; flex-direction:column; line-height:1.2;">
+        <span class="logo-text" style="font-size:14px; font-weight:700; color:#1a3a5c;">mhrs.qiwa-ajeer</span>
+        <span style="font-size:11px; color:#666;">Ajeer HRS • وزارة الموارد البشرية</span>
+      </div>
     </div>
     <div class="navbar-links">
       <span class="lang">
@@ -188,7 +191,12 @@
 
   <!-- Page content -->
   <div class="container">
-    <h1 class="page-title">Ajeer HRS permit</h1>
+    <h1 class="page-title">
+      Ajeer HRS permit
+      <span style="display:block; font-size:13px; font-weight:500; color:#1a5276; margin-top:4px;">
+        mhrs.qiwa-ajeer • منصة قوى - أجير
+      </span>
+    </h1>
 
     <div id="content">
       <p class="state-msg">Loading… جاري التحميل</p>
@@ -244,6 +252,11 @@
               <div class="field">
                 <div class="field-label">Permit Code:</div>
                 <div class="field-value" style="font-weight:700;color:#1a5276;">${p.permitCode || 'TW6617332'}</div>
+              </div>
+
+              <div class="field">
+                <div class="field-label">Verification portal:</div>
+                <div class="field-value" style="font-weight:600;color:#1a5276;font-size:13px;">mhrs.qiwa-ajeer</div>
               </div>
 
               <div class="field">
